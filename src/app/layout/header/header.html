@@ -18,7 +18,7 @@
 
   <nav class="desktop-nav" aria-label="Navegación principal">
     <button type="button" (click)="go('inicio')">Inicio</button>
-    <a href="#">Cafés</a>
+    <button type="button" (click)="go('catalogo')">Cafés</button>
     <button type="button" (click)="go('origen')">Origen</button>
   </nav>
 
@@ -36,7 +36,7 @@
 @if (menuOpen()) {
   <nav class="mobile-menu" aria-label="Navegación móvil">
     <button type="button" (click)="go('inicio')">Inicio</button>
-    <a href="#" (click)="menuOpen.set(false)">Catálogo</a>
+    <button type="button" (click)="go('catalogo')">Catálogo</button>
     <button type="button" (click)="go('origen')">Origen</button>
     <a href="#" (click)="menuOpen.set(false)">Ingresar / crear cuenta</a>
   </nav>

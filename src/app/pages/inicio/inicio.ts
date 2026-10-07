@@ -8,9 +8,9 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Inicio {
-  readonly navigate = output<'origen'>();
+  readonly navigate = output<'catalogo' | 'origen'>();
 
-  go(view: 'origen'): void {
+  go(view: 'catalogo' | 'origen'): void {
     this.navigate.emit(view);
   }
 }

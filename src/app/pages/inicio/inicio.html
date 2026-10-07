@@ -2,9 +2,9 @@
   <div class="hero-copy">
     <h1>Café de origen<br />Nariño.</h1>
     <p>Café de especialidad con información de finca, variedad y proceso.</p>
-    <a class="btn primary" href="#">Ver catálogo <span aria-hidden="true">→</span></a>
+    <button class="btn primary" type="button" (click)="go('catalogo')">Ver catálogo <span aria-hidden="true">→</span></button>
     <div class="hero-proof">
-      <b>100%</b> origen Nariño <i aria-hidden="true"></i> <b>17</b> variedades registradas
+      <b>100%</b> origen Nariño <i aria-hidden="true"></i> <b>16</b> variedades registradas
     </div>
   </div>
 </section>
@@ -15,11 +15,12 @@
       <h2>Cafés<br />destacados.</h2>
       <p>Origen, variedad, proceso y perfil sensorial de cada lote.</p>
     </div>
-    <a class="text-link" href="#">Ver catálogo →</a>
+    <button class="text-link" type="button" (click)="go('catalogo')">Ver catálogo →</button>
   </div>
   <div class="product-grid home-grid">
     <article class="product-card">
       <div class="product-image">
+        <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&amp;fit=crop&amp;w=1200&amp;q=88" alt="Café Caturra" loading="lazy" decoding="async" />
         <span>Lavado</span>
         <button type="button" aria-label="Agregar Caturra">+</button>
       </div>
@@ -32,6 +33,7 @@
     </article>
     <article class="product-card">
       <div class="product-image">
+        <img src="https://images.unsplash.com/photo-1586575403276-aa75f8e4650f?auto=format&amp;fit=crop&amp;w=1200&amp;q=88" alt="Café variedad Colombia" loading="lazy" decoding="async" />
         <span>Honey</span>
         <button type="button" aria-label="Agregar Variedad Colombia">+</button>
       </div>
@@ -44,6 +46,7 @@
     </article>
     <article class="product-card">
       <div class="product-image">
+        <img src="https://images.unsplash.com/photo-1694322111431-c505f41eb65d?auto=format&amp;fit=crop&amp;w=1200&amp;q=88" alt="Café Castillo" loading="lazy" decoding="async" />
         <span>Lavado</span>
         <button type="button" aria-label="Agregar Castillo">+</button>
       </div>
