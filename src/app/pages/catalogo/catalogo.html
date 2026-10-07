@@ -1,0 +1,24 @@
+<section class="catalog-head section-shell">
+  <p class="eyebrow">Inventario varietal · Nariño</p>
+  <h1>Catálogo de<br />variedades.</h1>
+  <div class="catalog-intro">
+    <p>Explora cafés de Nariño por variedad y perfil.</p>
+    <span>{{ totalCount() }} fichas · verificado el 12 de agosto de 2026</span>
+  </div>
+  <div class="filters" role="group" aria-label="Filtrar por familia varietal">
+    @for (group of groups; track group) {
+      <button
+        type="button"
+        [class.active]="selectedGroup() === group"
+        [attr.aria-pressed]="selectedGroup() === group"
+        (click)="groupSelected.emit(group)"
+      >{{ group }}</button>
+    }
+  </div>
+</section>
+
+<section class="product-grid catalog-grid section-shell" aria-label="Cafés de Nariño">
+  @for (coffee of coffees(); track coffee.id) {
+    <app-coffee-card [coffee]="coffee" />
+  }
+</section>

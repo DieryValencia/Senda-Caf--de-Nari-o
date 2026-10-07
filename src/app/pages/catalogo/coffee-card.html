@@ -1,0 +1,23 @@
+<article class="product-card">
+  <div class="product-image">
+    <img
+      [src]="coffee().cardImage"
+      [alt]="'Fotografía de café representativa de ' + coffee().name"
+      loading="eager"
+      decoding="async"
+      width="480"
+      height="600"
+    />
+    <span>{{ coffee().group }}</span>
+  </div>
+  <div class="product-meta">
+    <small>{{ coffee().municipality }} · {{ coffee().variety }}</small>
+    <h3>{{ coffee().name }}</h3>
+    <p>{{ coffee().notes.join(' · ') }}</p>
+    <div class="card-facts">
+      <span>{{ coffee().plantType }}</span>
+      <span>{{ coffee().rustResistance }}</span>
+    </div>
+    <strong>{{ coffee().price | coffeePrice }}</strong>
+  </div>
+</article>

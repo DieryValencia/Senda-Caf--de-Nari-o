@@ -3,6 +3,13 @@
 <main>
   @if (view() === 'inicio') {
     <app-inicio (navigate)="navigate($event)" />
+  } @else if (view() === 'catalogo') {
+    <app-catalogo
+      [coffees]="filteredCoffees()"
+      [totalCount]="coffees.length"
+      [selectedGroup]="selectedGroup()"
+      (groupSelected)="selectedGroup.set($event)"
+    />
   } @else {
     <app-origen />
   }

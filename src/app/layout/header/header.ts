@@ -8,10 +8,10 @@ import { ChangeDetectionStrategy, Component, output, signal } from '@angular/cor
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
-  readonly navigate = output<'inicio' | 'origen'>();
+  readonly navigate = output<'inicio' | 'catalogo' | 'origen'>();
   readonly menuOpen = signal(false);
 
-  go(view: 'inicio' | 'origen'): void {
+  go(view: 'inicio' | 'catalogo' | 'origen'): void {
     this.navigate.emit(view);
     this.menuOpen.set(false);
   }
