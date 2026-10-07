@@ -8,6 +8,12 @@
       width="480"
       height="600"
     />
+    <button
+      class="image-open"
+      type="button"
+      [attr.aria-label]="'Ver ficha de ' + coffee().name"
+      (click)="viewRequested.emit(coffee())"
+    ></button>
     <span>{{ coffee().group }}</span>
   </div>
   <div class="product-meta">
@@ -19,5 +25,8 @@
       <span>{{ coffee().rustResistance }}</span>
     </div>
     <strong>{{ coffee().price | coffeePrice }}</strong>
+    <button class="card-link" type="button" (click)="viewRequested.emit(coffee())">
+      Ver ficha <span aria-hidden="true">→</span>
+    </button>
   </div>
 </article>

@@ -1,0 +1,33 @@
+<section class="detail-shell">
+  <button class="back" type="button" (click)="backRequested.emit()">← Volver a cafés</button>
+
+  <div class="detail-grid">
+    <div class="detail-image">
+      <img
+        [src]="coffee().image"
+        [alt]="'Fotografía de granos de café representativa de ' + coffee().name"
+        decoding="async"
+        fetchpriority="high"
+      />
+      <span>LOTE {{ coffee().id.toString().padStart(2, '0') }} · 250 G</span>
+    </div>
+
+    <div class="detail-info">
+      <p class="detail-eyebrow">{{ coffee().municipality }}, Nariño · {{ coffee().group }}</p>
+      <h1>{{ coffee().name }}</h1>
+      <div class="tasting">
+        @for (note of coffee().notes; track note) {
+          <span>{{ note }}</span>
+        }
+      </div>
+      <p class="story">{{ coffee().story }}</p>
+      <div class="purchase">
+        <strong>{{ coffee().price | coffeePrice }}</strong>
+        <button class="primary" type="button" disabled>Agregar a la bolsa <span>+</span></button>
+      </div>
+      <p class="shipping-line">Precio de referencia por 250 g · Compra disponible próximamente</p>
+    </div>
+  </div>
+
+  <app-traceability [coffee]="coffee()" />
+</section>
