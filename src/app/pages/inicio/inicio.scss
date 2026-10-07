@@ -1,0 +1,416 @@
+@use '../../../styles/tokens' as *;
+
+.btn {
+  height: 54px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  border: 1px solid $green;
+  background: $green;
+  color: $white;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    background: #2c523a;
+    transform: translateY(-1px);
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: 400;
+  }
+
+  &.secondary {
+    background: transparent;
+    color: $green;
+  }
+}
+
+.hero {
+  min-height: calc(100vh - 106px);
+  display: block;
+}
+
+.hero-copy {
+  min-height: inherit;
+  padding: clamp(50px, 8vw, 118px) clamp(28px, 7vw, 104px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero h1 {
+  @include heading(54px, 6.3vw, 100px);
+  line-height: 0.9;
+  margin: 0 0 32px;
+}
+
+.hero-copy > p {
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 500px;
+  color: #445248;
+  margin: 0 0 38px;
+}
+
+.hero-proof {
+  width: min(680px, 100%);
+  margin-top: 72px;
+  padding-top: 18px;
+  border-top: 1px solid $line;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #657065;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  b {
+    color: $ink;
+    font-size: 20px;
+    font-weight: 500;
+  }
+
+  i {
+    width: 1px;
+    height: 26px;
+    background: $line;
+    margin: 0 10px;
+  }
+}
+
+.section-shell {
+  padding: 110px clamp(22px, 7vw, 110px);
+}
+
+.section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 50px;
+
+  h2 {
+    @include heading;
+    line-height: 0.98;
+    margin: 0;
+  }
+
+  p {
+    max-width: 420px;
+    color: $muted;
+    line-height: 1.6;
+    margin: 20px 0 0;
+  }
+}
+
+.text-link {
+  border: 0;
+  border-bottom: 1px solid;
+  background: transparent;
+  padding: 8px 0;
+  color: $ink;
+  font-size: 13px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.product-grid {
+  display: grid;
+  gap: 22px;
+}
+
+.home-grid {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.product-card {
+  min-width: 0;
+}
+
+.product-image {
+  aspect-ratio: 4 / 5;
+  position: relative;
+  overflow: hidden;
+  background: #ddd;
+
+  > span {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(244, 240, 230, 0.94);
+    padding: 8px 11px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  > button {
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    width: 48px;
+    height: 48px;
+    border: 0;
+    border-radius: 50%;
+    background: $cream;
+    font-size: 26px;
+    cursor: pointer;
+    transition:
+      background 0.2s,
+      color 0.2s;
+
+    &:hover {
+      background: $green;
+      color: $white;
+    }
+  }
+}
+
+.product-meta {
+  padding: 20px 2px 4px;
+  position: relative;
+
+  small {
+    color: $muted-2;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  h3 {
+    font-size: 26px;
+    font-weight: 500;
+    line-height: 1.1;
+    margin: 9px 0;
+  }
+
+  p {
+    color: $muted-2;
+    font-size: 12px;
+    margin: 0;
+  }
+
+  strong {
+    position: absolute;
+    right: 0;
+    bottom: 3px;
+    font-size: 13px;
+  }
+}
+
+.origin-band {
+  display: block;
+  background: $green;
+  color: $white;
+}
+
+.origin-copy {
+  min-height: 560px;
+  padding: 80px clamp(32px, 10vw, 150px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  > small {
+    @include eyebrow;
+    opacity: 0.7;
+    margin-bottom: 28px;
+  }
+
+  h2 {
+    @include heading;
+    color: $white;
+    line-height: 0.98;
+    margin: 0;
+  }
+
+  p {
+    max-width: 440px;
+    color: #d7e0d9;
+    line-height: 1.75;
+    margin: 34px 0;
+  }
+
+  .secondary {
+    align-self: flex-start;
+    border-color: $white;
+    color: $white;
+
+    &:hover {
+      background: $white;
+      color: $green;
+    }
+  }
+}
+
+.trace {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  gap: 70px;
+
+  small {
+    @include eyebrow;
+    color: $muted;
+  }
+
+  h2 {
+    @include heading;
+    line-height: 0.98;
+    margin: 0;
+  }
+
+  ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 70px 1fr;
+    padding: 24px 0;
+    border-top: 1px solid $line-soft;
+
+    &:last-child {
+      border-bottom: 1px solid $line-soft;
+    }
+
+    > span {
+      color: $rust;
+      font-size: 21px;
+      font-weight: 500;
+    }
+
+    h3 {
+      font-size: 23px;
+      font-weight: 500;
+      margin: 0 0 8px;
+    }
+
+    p {
+      color: #6c746d;
+      font-size: 13px;
+      line-height: 1.6;
+      margin: 0;
+    }
+  }
+}
+
+@include mobile {
+  .hero {
+    min-height: auto;
+  }
+
+  .hero-copy {
+    min-height: auto;
+    padding: 48px 22px 38px;
+  }
+
+  .hero h1 {
+    font-size: 56px;
+    margin-bottom: 22px;
+  }
+
+  .hero-copy > p {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 28px;
+  }
+
+  .hero-proof {
+    margin-top: 42px;
+    flex-wrap: wrap;
+  }
+
+  .featured.section-shell {
+    padding-top: 32px;
+  }
+
+  .section-shell {
+    padding: 72px 20px;
+  }
+
+  .section-heading {
+    display: block;
+    margin-bottom: 30px;
+
+    h2 {
+      font-size: 44px;
+    }
+
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .text-link {
+    display: inline-block;
+    margin-top: 24px;
+  }
+
+  .home-grid {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-right: -20px;
+    padding-right: 20px;
+
+    &::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    .product-card {
+      min-width: 78vw;
+      scroll-snap-align: start;
+    }
+  }
+
+  .product-meta h3 {
+    font-size: 23px;
+  }
+
+  .origin-copy {
+    min-height: 0;
+    padding: 64px 24px;
+  }
+
+  .trace {
+    display: block;
+
+    > div {
+      margin-bottom: 35px;
+    }
+
+    li {
+      grid-template-columns: 52px 1fr;
+    }
+  }
+}
+
+@media (max-width: 390px) {
+  .hero h1 {
+    font-size: 50px;
+  }
+
+  .btn {
+    gap: 22px;
+    padding: 0 18px;
+  }
+}

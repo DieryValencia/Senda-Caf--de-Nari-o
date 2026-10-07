@@ -1,0 +1,205 @@
+@use '../../../styles/tokens' as *;
+
+.section-shell {
+  padding: 110px clamp(22px, 7vw, 110px);
+}
+
+.btn {
+  height: 54px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  border: 1px solid $green;
+  background: $green;
+  color: $white;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    background: #2c523a;
+    transform: translateY(-1px);
+  }
+
+  span {
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
+
+.origin-hero {
+  height: 74vh;
+  min-height: 600px;
+  position: relative;
+  color: $white;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 25%, rgba(9, 25, 16, 0.72));
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  > div {
+    position: absolute;
+    z-index: 1;
+    left: clamp(24px, 8vw, 120px);
+    bottom: 72px;
+  }
+
+  p {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  h1 {
+    @include heading(58px, 7vw, 105px);
+    line-height: 0.9;
+    margin: 22px 0 0;
+  }
+}
+
+.origin-story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+
+  > div:last-child {
+    padding-top: 48px;
+  }
+
+  small {
+    @include eyebrow;
+    color: $muted;
+  }
+
+  h2 {
+    @include heading;
+    line-height: 0.98;
+    margin: 0;
+  }
+
+  p {
+    color: #4f5d53;
+    font-size: 18px;
+    line-height: 1.8;
+    margin: 0 0 28px;
+  }
+}
+
+.terrain-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 60px clamp(22px, 8vw, 120px);
+  background: $rust;
+  color: $white;
+
+  div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid rgba(255, 255, 255, 0.35);
+
+    &:last-child {
+      border: 0;
+    }
+  }
+
+  strong {
+    font-size: clamp(40px, 5vw, 70px);
+    font-weight: 500;
+  }
+
+  span {
+    margin-top: 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+}
+
+.producer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+
+  small {
+    @include eyebrow;
+    color: $muted;
+  }
+
+  h2 {
+    @include heading;
+    line-height: 0.98;
+    margin: 0;
+  }
+
+  p {
+    color: #5e6961;
+    line-height: 1.8;
+    margin: 30px 0;
+  }
+}
+
+.producer-photo {
+  position: relative;
+  height: 620px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+@include mobile {
+  .section-shell {
+    padding: 72px 20px;
+  }
+
+  .origin-story,
+  .producer {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .origin-story h2,
+  .producer h2 {
+    font-size: 44px;
+  }
+
+  .origin-story > div:last-child {
+    padding-top: 0;
+  }
+
+  .terrain-stats {
+    grid-template-columns: 1fr;
+    padding: 15px 24px;
+
+    div {
+      padding: 30px 0;
+      border-right: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+    }
+  }
+
+  .producer-photo {
+    height: 420px;
+  }
+}
