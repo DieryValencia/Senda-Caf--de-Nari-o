@@ -27,6 +27,7 @@ export interface Coffee {
   priceSource: string;
   priceCheckedAt: string;
   image: string;
+  cardImage: string;
   imageSource: string;
   homeImage?: string;
   story: string;
@@ -106,7 +107,7 @@ export const COFFEES: Coffee[] = ([
     { id:15,name:'Wush Wush',municipality:'Cumbitara',farm:'Café El Turpial · referencia documentada',producer:'Asociación de Caficultores de Cumbitara',altitude:'2.200 m s. n. m.',variety:'Wush Wush',group:'Especiales',species:'Coffea arabica',lineage:'Landrace etíope asociado a la zona de Wushwush.',plantType:'Porte alto y adaptación variable fuera de Etiopía.',rustResistance:'Sin resistencia general garantizada.',evidence:'Agencia de Desarrollo Rural · El Turpial, Cumbitara',process:'Natural',harvest:'Recolección manual documentada.',drying:'Secado solar natural documentado',roast:'Claro',score:'Lote especial',notes:['Fruta tropical','Floral','Especias'],price:92000,image:'https://images.unsplash.com/photo-1511081692775-05d0f180a065?auto=format&fit=crop&w=1200&q=88',imageCredit:'Fotografía documental · Unsplash',story:'Material etíope de producción limitada incorporado a la experimentación de especialidad en Cumbitara. El proceso poscosecha influye de manera decisiva en su expresión sensorial.',accent:'#5b3c4c' },
     { id:16,name:'Etíope',municipality:'Cumbitara',farm:'Café El Turpial · referencia documentada',producer:'Asociación de Caficultores de Cumbitara',altitude:'2.200 m s. n. m.',variety:'Material etíope no especificado',group:'Especiales',species:'Coffea arabica',lineage:'Germoplasma de procedencia etíope; la fuente no identifica el cultivar exacto.',plantType:'No determinado públicamente para este lote.',rustResistance:'No determinada públicamente.',evidence:'Agencia de Desarrollo Rural · El Turpial, Cumbitara',process:'Natural',harvest:'Recolección manual documentada.',drying:'Secado solar natural documentado',roast:'Claro',score:'Lote especial',notes:['Flores','Cítrico','Fruta'],price:84000,image:'https://images.unsplash.com/photo-1525088553748-01d6e210e00b?auto=format&fit=crop&w=1200&q=88',imageCredit:'Fotografía documental · Unsplash',story:'La fuente enumera “Ethiopian” sin mayor identificación. Se mantiene esa precisión: es una categoría de germoplasma documentada, no un nombre varietal suficientemente resuelto.',accent:'#6e5d3f' },
     { id:17,name:'Sudán',municipality:'Cumbitara',farm:'Café El Turpial · referencia documentada',producer:'Asociación de Caficultores de Cumbitara',altitude:'2.200 m s. n. m.',variety:'Material sudanés no especificado',group:'Especiales',species:'Coffea arabica',lineage:'Germoplasma reportado como “Sudan”; la fuente no publica la accesión concreta.',plantType:'No determinado públicamente para este lote.',rustResistance:'No determinada públicamente.',evidence:'Agencia de Desarrollo Rural · El Turpial, Cumbitara',process:'Natural',harvest:'Recolección manual documentada.',drying:'Secado solar natural documentado',roast:'Claro',score:'Lote especial',notes:['Fruta roja','Hierbas','Miel'],price:84000,image:'https://images.unsplash.com/photo-1516743619420-154b70a65fea?auto=format&fit=crop&w=1200&q=88',imageCredit:'Fotografía documental · Unsplash',story:'Entrada conservada con el nombre publicado por la fuente. Sin una accesión o cultivar verificable, el catálogo no le atribuye genealogía ni resistencia específicas.',accent:'#715141' }
-  ] as Omit<Coffee, 'imageSource' | 'homeImage' | 'priceBasis' | 'priceSource' | 'priceCheckedAt'>[]).map((coffee, index) => {
+  ] as Omit<Coffee, 'imageSource' | 'cardImage' | 'homeImage' | 'priceBasis' | 'priceSource' | 'priceCheckedAt'>[]).map((coffee, index) => {
     const isPinkBourbon = coffee.name === 'Bourbon Rosado';
     const isSpecial = coffee.group === 'Especiales';
     const priceAudit = isPinkBourbon
@@ -135,6 +136,7 @@ export const COFFEES: Coffee[] = ([
       priceCheckedAt: '12 de agosto de 2026',
       homeImage: index < 3 ? coffee.image : undefined,
       image: PRODUCT_IMAGES[index].url,
+      cardImage: PRODUCT_IMAGES[index].url.replace('w=1200&h=1500', 'w=480&h=600'),
       imageCredit: PRODUCT_IMAGES[index].credit,
       imageSource: PRODUCT_IMAGES[index].source
     };

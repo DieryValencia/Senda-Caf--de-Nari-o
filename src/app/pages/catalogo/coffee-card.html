@@ -1,12 +1,12 @@
 <article class="product-card">
   <div class="product-image">
     <img
-      [src]="coffee().image"
+      [src]="coffee().cardImage"
       [alt]="'Fotografía de café representativa de ' + coffee().name"
-      loading="lazy"
+      loading="eager"
       decoding="async"
-      width="1200"
-      height="1500"
+      width="480"
+      height="600"
     />
     <span>{{ coffee().group }}</span>
   </div>
