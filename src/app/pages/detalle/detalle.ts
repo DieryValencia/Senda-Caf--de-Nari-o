@@ -1,15 +1,16 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Coffee } from '../../coffee.data';
 import { CoffeePricePipe } from '../../coffee-price.pipe';
+import { Traceability } from './traceability';
 
 @Component({
-  selector: 'app-coffee-card',
-  imports: [CoffeePricePipe],
-  templateUrl: './coffee-card.html',
-  styleUrl: './coffee-card.scss',
+  selector: 'app-detalle',
+  imports: [CoffeePricePipe, Traceability],
+  templateUrl: './detalle.html',
+  styleUrl: './detalle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CoffeeCard {
+export class Detalle {
   readonly coffee = input.required<Coffee>();
-  readonly viewRequested = output<Coffee>();
+  readonly backRequested = output<void>();
 }

@@ -24,6 +24,15 @@
     object-fit: cover;
   }
 
+  .image-open {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
   span {
     position: absolute;
     top: 14px;
@@ -34,7 +43,21 @@
     font-weight: 700;
     letter-spacing: 0.12em;
     text-transform: uppercase;
+    pointer-events: none;
   }
+}
+
+.card-link {
+  align-self: flex-start;
+  margin-top: 12px;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  color: $green;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .product-meta {
