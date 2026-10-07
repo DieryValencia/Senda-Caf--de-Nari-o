@@ -1,0 +1,43 @@
+<div class="announcement">Envío nacional sin costo desde $100.000</div>
+
+<header class="site-header">
+  <button
+    class="icon-button mobile-only"
+    type="button"
+    [attr.aria-label]="menuOpen() ? 'Cerrar menú' : 'Abrir menú'"
+    [attr.aria-expanded]="menuOpen()"
+    (click)="toggleMenu()"
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+  </button>
+
+  <button class="brand" type="button" aria-label="Ir al inicio" (click)="go('inicio')">
+    <span class="brand-mark" aria-hidden="true"><i></i><i></i></span>
+    <span>SENDA<small>CAFÉ DE NARIÑO</small></span>
+  </button>
+
+  <nav class="desktop-nav" aria-label="Navegación principal">
+    <button type="button" (click)="go('inicio')">Inicio</button>
+    <a href="#">Cafés</a>
+    <button type="button" (click)="go('origen')">Origen</button>
+  </nav>
+
+  <div class="header-actions">
+    <a class="account desktop-account" href="#">Ingresar</a>
+    <a class="bag-button" href="#" aria-label="Abrir bolsa de compra">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M6.5 8.5h11l1 12h-13l1-12Z" />
+        <path d="M9 9V6a3 3 0 0 1 6 0v3" />
+      </svg>
+    </a>
+  </div>
+</header>
+
+@if (menuOpen()) {
+  <nav class="mobile-menu" aria-label="Navegación móvil">
+    <button type="button" (click)="go('inicio')">Inicio</button>
+    <a href="#" (click)="menuOpen.set(false)">Catálogo</a>
+    <button type="button" (click)="go('origen')">Origen</button>
+    <a href="#" (click)="menuOpen.set(false)">Ingresar / crear cuenta</a>
+  </nav>
+}

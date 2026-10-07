@@ -1,0 +1,239 @@
+@use '../../../styles/tokens' as *;
+
+.announcement {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $green;
+  color: #eef4e9;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+}
+
+.site-header {
+  height: 76px;
+  padding: 0 clamp(20px, 5vw, 72px);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  background: rgba(244, 240, 230, 0.96);
+  border-bottom: 1px solid rgba(23, 35, 27, 0.12);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  backdrop-filter: blur(12px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: $ink;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  justify-self: start;
+
+  small {
+    display: block;
+    font-size: 8px;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.2em;
+  }
+}
+
+.brand-mark {
+  width: 31px;
+  height: 31px;
+  position: relative;
+  display: inline-block;
+
+  i {
+    position: absolute;
+    width: 15px;
+    height: 24px;
+    border: 2px solid currentColor;
+    border-radius: 80% 10% 80% 10%;
+    transform: rotate(45deg);
+    left: 2px;
+    top: 2px;
+  }
+
+  i + i {
+    transform: rotate(225deg);
+    left: 13px;
+    top: 7px;
+  }
+}
+
+.desktop-nav {
+  display: flex;
+  gap: 34px;
+
+  button,
+  a {
+    position: relative;
+    padding: 10px 0;
+    border: 0;
+    background: none;
+    color: $ink;
+    font-size: 13px;
+    text-decoration: none;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: $ink;
+      transition: width 0.25s;
+    }
+
+    &:hover::after {
+      width: 100%;
+    }
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-self: end;
+  gap: 22px;
+}
+
+.account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: $ink;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.bag-button,
+.icon-button {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  background: transparent;
+  color: $ink;
+  position: relative;
+  cursor: pointer;
+}
+
+.bag-button {
+  text-decoration: none;
+}
+
+.bag-button svg,
+.icon-button svg {
+  width: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mobile-only {
+  display: none;
+}
+
+.mobile-menu {
+  position: fixed;
+  z-index: 45;
+  top: 106px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border-bottom: 1px solid #c5beb2;
+  background: $cream;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+
+  button,
+  a {
+    padding: 17px 4px;
+    border: 0;
+    border-bottom: 1px solid #d1cabd;
+    background: none;
+    color: $ink;
+    font-size: 20px;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+@include mobile {
+  .announcement {
+    height: 27px;
+    font-size: 9px;
+  }
+
+  .site-header {
+    height: 62px;
+    grid-template-columns: 44px 1fr 44px;
+    padding: 0 10px;
+  }
+
+  .mobile-only {
+    display: flex;
+  }
+
+  .brand {
+    justify-self: center;
+    font-size: 16px;
+  }
+
+  .brand-mark {
+    width: 25px;
+    height: 25px;
+
+    i {
+      width: 12px;
+      height: 19px;
+    }
+
+    i + i {
+      left: 10px;
+      top: 6px;
+    }
+  }
+
+  .brand small {
+    font-size: 6px;
+  }
+
+  .desktop-nav,
+  .desktop-account {
+    display: none;
+  }
+
+  .header-actions {
+    justify-self: end;
+  }
+
+  .bag-button {
+    width: 40px;
+  }
+
+  .mobile-menu {
+    top: 89px;
+  }
+}
