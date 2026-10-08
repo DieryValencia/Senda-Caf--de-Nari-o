@@ -26,18 +26,27 @@
         (addRequested)="addToBag($event)"
       />
     }
+  } @else if (view() === 'checkout') {
+    @defer (when view() === 'checkout') {
+      <app-checkout (backRequested)="backToBag()" (payRequested)="confirmOrder()" />
+    }
+  } @else if (view() === 'confirmation') {
+    @defer (when view() === 'confirmation') {
+      <app-confirmation [order]="confirmedOrder()" (homeRequested)="navigate('inicio')" />
+    }
   } @else {
     <app-origen />
   }
 </main>
 
 <app-footer (navigate)="navigate($event)" />
-<app-bottom-nav (navigate)="navigate($event)" (bagRequested)="openBag()" />
+<app-bottom-nav (navigate)="navigate($event)" />
 
 @if (bagOpen()) {
   @defer (when bagOpen()) {
     <app-bag
       (closeRequested)="bagOpen.set(false)"
+      (checkoutRequested)="continueToCheckout()"
       (catalogRequested)="navigate('catalogo')"
     />
   }
