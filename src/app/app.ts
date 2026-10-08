@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { COFFEES, Coffee, VarietyGroup } from './coffee.data';
 import { CartStore } from './cart/cart.store';
 import { Bag } from './pages/bag/bag';
+import { Checkout } from './pages/checkout/checkout';
 import { BottomNav } from './layout/bottom-nav/bottom-nav';
 import { Footer } from './layout/footer/footer';
 import { Header } from './layout/header/header';
@@ -10,11 +11,11 @@ import { Detalle } from './pages/detalle/detalle';
 import { Inicio } from './pages/inicio/inicio';
 import { Origen } from './pages/origen/origen';
 
-type View = 'inicio' | 'catalogo' | 'detalle' | 'origen';
+type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, Origen, Bag],
+  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, Origen, Bag, Checkout],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -45,6 +46,18 @@ export class App {
   addToBag(coffee: Coffee): void {
     this.cart.add(coffee);
     this.openBag();
+  }
+
+  continueToCheckout(): void {
+    if (this.cart.itemCount() === 0) {
+      return;
+    }
+
+    this.navigate('checkout');
+  }
+
+  backToBag(): void {
+    this.bagOpen.set(true);
   }
 
   openCoffee(coffee: Coffee): void {
