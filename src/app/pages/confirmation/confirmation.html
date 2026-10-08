@@ -1,0 +1,60 @@
+@if (order(); as confirmedOrder) {
+<section class="confirmation-shell" aria-labelledby="confirmation-title">
+  <div class="confirmation-content">
+    <div class="success-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="m5 12.5 4.2 4.2L19 7" />
+      </svg>
+    </div>
+
+    <p class="eyebrow">Senda Café de Nariño</p>
+    <h1 id="confirmation-title">Pedido<br />confirmado.</h1>
+    <p class="confirmation-copy">Gracias por elegir café de Nariño. Aquí está el resumen de tu compra.</p>
+
+    <div class="order-number">
+      <span>Número de pedido</span>
+      <strong>{{ orderNumber }}</strong>
+    </div>
+
+    <section class="order-summary" aria-labelledby="summary-title">
+      <h2 id="summary-title">Resumen del pedido</h2>
+      <div class="summary-items">
+        @for (line of confirmedOrder.items; track line.coffee.id) {
+          <article class="summary-item">
+            <img
+              [src]="line.coffee.cardImage"
+              [alt]="'Café ' + line.coffee.name"
+              width="56"
+              height="56"
+            />
+            <div class="item-description">
+              <h3>{{ line.coffee.name }}</h3>
+              <p>{{ line.quantity }} × {{ line.coffee.price | coffeePrice }}</p>
+            </div>
+            <strong>{{ line.coffee.price * line.quantity | coffeePrice }}</strong>
+          </article>
+        }
+      </div>
+
+      <dl class="summary-totals">
+        <div>
+          <dt>Subtotal</dt>
+          <dd>{{ confirmedOrder.subtotal | coffeePrice }}</dd>
+        </div>
+        <div>
+          <dt>Envío</dt>
+          <dd>{{ confirmedOrder.shipping === 0 ? 'Gratis' : (confirmedOrder.shipping | coffeePrice) }}</dd>
+        </div>
+        <div class="summary-total">
+          <dt>Total</dt>
+          <dd>{{ confirmedOrder.total | coffeePrice }}</dd>
+        </div>
+      </dl>
+    </section>
+    <p class="demo-note">Confirmación de demostración · No se procesó ningún pago.</p>
+    <button class="home-button" type="button" (click)="homeRequested.emit()">
+      Volver al inicio <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</section>
+}
