@@ -24,12 +24,15 @@
 
   <div class="header-actions">
     <a class="account desktop-account" href="#">Ingresar</a>
-    <a class="bag-button" href="#" aria-label="Abrir bolsa de compra">
+    <button class="bag-button" type="button" aria-label="Abrir bolsa de compra" (click)="bagRequested.emit()">
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M6.5 8.5h11l1 12h-13l1-12Z" />
         <path d="M9 9V6a3 3 0 0 1 6 0v3" />
       </svg>
-    </a>
+      @if (itemCount() > 0) {
+        <span class="bag-count" aria-live="polite">{{ itemCount() }}</span>
+      }
+    </button>
   </div>
 </header>
 

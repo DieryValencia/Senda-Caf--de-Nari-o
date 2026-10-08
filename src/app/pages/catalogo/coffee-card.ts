@@ -12,4 +12,5 @@ import { CoffeePricePipe } from '../../coffee-price.pipe';
 export class CoffeeCard {
   readonly coffee = input.required<Coffee>();
   readonly viewRequested = output<Coffee>();
+  readonly addRequested = output<Coffee>();
 }

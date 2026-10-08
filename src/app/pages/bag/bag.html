@@ -1,0 +1,102 @@
+<dialog
+  #drawer
+  class="bag-drawer"
+  aria-labelledby="bag-title"
+  (cancel)="closeRequested.emit()"
+  (click)="closeOnBackdrop($event)"
+>
+  <header class="bag-header">
+    <div>
+      <p class="eyebrow">Tu selección</p>
+      <h2 id="bag-title">Bolsa <span>({{ cart.itemCount() }})</span></h2>
+    </div>
+    <button
+      class="close-button"
+      type="button"
+      aria-label="Cerrar bolsa"
+      autofocus
+      (click)="closeRequested.emit()"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+    </button>
+  </header>
+
+  @if (cart.items().length > 0) {
+    <div class="bag-content">
+      <p class="shipping-message">
+        @if (cart.remainingForFreeShipping() > 0) {
+          Te faltan {{ cart.remainingForFreeShipping() | coffeePrice }} para envío gratis.
+        } @else {
+          Tu pedido tiene envío gratis.
+        }
+      </p>
+      <div
+        class="shipping-progress"
+        role="progressbar"
+        aria-label="Progreso para obtener envío gratis"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        [attr.aria-valuenow]="cart.shippingProgress()"
+      >
+        <span [style.width.%]="cart.shippingProgress()"></span>
+      </div>
+
+      <div class="bag-items">
+        @for (line of cart.items(); track line.coffee.id) {
+          <article class="bag-item">
+            <img
+              [src]="line.coffee.cardImage"
+              [alt]="'Café ' + line.coffee.name"
+              width="88"
+              height="88"
+            />
+            <div class="item-info">
+              <p class="item-origin">{{ line.coffee.municipality }} · 250 g</p>
+              <h3>{{ line.coffee.name }}</h3>
+              <strong>{{ line.coffee.price | coffeePrice }}</strong>
+              <div class="quantity-control" [attr.aria-label]="'Cantidad de ' + line.coffee.name">
+                <button
+                  type="button"
+                  [attr.aria-label]="'Quitar una unidad de ' + line.coffee.name"
+                  (click)="cart.adjustQuantity(line.coffee.id, -1)"
+                >−</button>
+                <span aria-live="polite">{{ line.quantity }}</span>
+                <button
+                  type="button"
+                  [attr.aria-label]="'Agregar una unidad de ' + line.coffee.name"
+                  (click)="cart.adjustQuantity(line.coffee.id, 1)"
+                >+</button>
+              </div>
+            </div>
+            <button
+              class="remove-item"
+              type="button"
+              [attr.aria-label]="'Quitar ' + line.coffee.name + ' de la bolsa'"
+              (click)="cart.remove(line.coffee.id)"
+            >Quitar</button>
+          </article>
+        }
+      </div>
+    </div>
+
+    <footer class="bag-footer">
+      <dl class="totals">
+        <div><dt>Subtotal</dt><dd>{{ cart.subtotal() | coffeePrice }}</dd></div>
+        <div><dt>Envío</dt><dd>{{ cart.shipping() === 0 ? 'Gratis' : (cart.shipping() | coffeePrice) }}</dd></div>
+        <div class="grand-total"><dt>Total</dt><dd>{{ cart.total() | coffeePrice }}</dd></div>
+      </dl>
+      <button class="primary-button" type="button" (click)="checkoutRequested.emit()">
+        Continuar al checkout <span aria-hidden="true">→</span>
+      </button>
+      <button class="text-button" type="button" (click)="closeRequested.emit()">Seguir explorando</button>
+    </footer>
+  } @else {
+    <div class="empty-bag">
+      <p>Tu bolsa está vacía.</p>
+      <span>Descubre cafés de origen nariñense para tu próxima taza.</span>
+      <button class="primary-button" type="button" (click)="catalogRequested.emit()">
+        Explorar cafés <span aria-hidden="true">→</span>
+      </button>
+    </div>
+  }
+</dialog>

@@ -1,8 +1,15 @@
-<app-header (navigate)="navigate($event)" />
+<app-header
+  [itemCount]="cart.itemCount()"
+  (navigate)="navigate($event)"
+  (bagRequested)="openBag()"
+/>
 
 <main>
   @if (view() === 'inicio') {
-    <app-inicio (navigate)="navigate($event)" />
+    <app-inicio
+      (navigate)="navigate($event)"
+      (addRequested)="addToBag($event)"
+    />
   } @else if (view() === 'catalogo') {
     @defer (when view() === 'catalogo') {
       <app-catalogo
@@ -11,11 +18,16 @@
         [selectedGroup]="selectedGroup()"
         (groupSelected)="selectedGroup.set($event)"
         (coffeeSelected)="openCoffee($event)"
+        (addRequested)="addToBag($event)"
       />
     }
   } @else if (view() === 'detalle') {
     @defer (when view() === 'detalle') {
-      <app-detalle [coffee]="selectedCoffee()" (backRequested)="navigate('catalogo')" />
+      <app-detalle
+        [coffee]="selectedCoffee()"
+        (backRequested)="navigate('catalogo')"
+        (addRequested)="addToBag($event)"
+      />
     }
   } @else {
     <app-origen />
@@ -23,4 +35,13 @@
 </main>
 
 <app-footer (navigate)="navigate($event)" />
-<app-bottom-nav (navigate)="navigate($event)" />
+<app-bottom-nav (navigate)="navigate($event)" (bagRequested)="openBag()" />
+
+@if (bagOpen()) {
+  @defer (when bagOpen()) {
+    <app-bag
+      (closeRequested)="bagOpen.set(false)"
+      (catalogRequested)="navigate('catalogo')"
+    />
+  }
+}

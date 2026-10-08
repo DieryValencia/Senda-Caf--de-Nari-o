@@ -9,6 +9,7 @@ import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 })
 export class BottomNav {
   readonly navigate = output<'inicio' | 'catalogo'>();
+  readonly bagRequested = output<void>();
 
   go(view: 'inicio' | 'catalogo'): void {
     this.navigate.emit(view);

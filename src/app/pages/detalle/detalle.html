@@ -23,9 +23,11 @@
       <p class="story">{{ coffee().story }}</p>
       <div class="purchase">
         <strong>{{ coffee().price | coffeePrice }}</strong>
-        <button class="primary" type="button" disabled>Agregar a la bolsa <span>+</span></button>
+        <button class="primary" type="button" (click)="addRequested.emit(coffee())">
+          Agregar a la bolsa <span aria-hidden="true">+</span>
+        </button>
       </div>
-      <p class="shipping-line">Precio de referencia por 250 g · Compra disponible próximamente</p>
+      <p class="shipping-line">Precio de referencia por 250 g · Envío gratis desde $100.000</p>
     </div>
   </div>
 

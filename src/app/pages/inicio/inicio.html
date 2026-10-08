@@ -22,39 +22,51 @@
       <div class="product-image">
         <img src="https://images.unsplash.com/photo-1447933601403-0c6688de566e?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Café Caturra" loading="eager" decoding="async" />
         <span>Lavado</span>
-        <button type="button" aria-label="Agregar Caturra">+</button>
+        <button
+          type="button"
+          [attr.aria-label]="'Agregar ' + featuredCoffees[0].name"
+          (click)="addRequested.emit(featuredCoffees[0])"
+        >+</button>
       </div>
       <div class="product-meta">
         <small>Buesaco · 2.050 m s. n. m.</small>
         <h3>Caturra</h3>
         <p>Cítrico · Panela · Cacao</p>
-        <strong>$48.000</strong>
+        <strong>{{ featuredPrices[0] }}</strong>
       </div>
     </article>
     <article class="product-card">
       <div class="product-image">
         <img src="https://images.unsplash.com/photo-1586575403276-aa75f8e4650f?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Café variedad Colombia" loading="eager" decoding="async" />
         <span>Honey</span>
-        <button type="button" aria-label="Agregar Variedad Colombia">+</button>
+        <button
+          type="button"
+          [attr.aria-label]="'Agregar ' + featuredCoffees[1].name"
+          (click)="addRequested.emit(featuredCoffees[1])"
+        >+</button>
       </div>
       <div class="product-meta">
         <small>El Tablón de Gómez · 2.150 m s. n. m.</small>
         <h3>Variedad Colombia</h3>
         <p>Miel · Durazno · Floral</p>
-        <strong>$50.000</strong>
+        <strong>{{ featuredPrices[1] }}</strong>
       </div>
     </article>
     <article class="product-card">
       <div class="product-image">
         <img src="https://images.unsplash.com/photo-1694322111431-c505f41eb65d?auto=format&amp;fit=crop&amp;w=600&amp;q=80" alt="Café Castillo" loading="eager" decoding="async" />
         <span>Lavado</span>
-        <button type="button" aria-label="Agregar Castillo">+</button>
+        <button
+          type="button"
+          [attr.aria-label]="'Agregar ' + featuredCoffees[2].name"
+          (click)="addRequested.emit(featuredCoffees[2])"
+        >+</button>
       </div>
       <div class="product-meta">
         <small>La Unión · 1.850 m s. n. m.</small>
         <h3>Castillo</h3>
         <p>Caramelo · Cítrico · Chocolate</p>
-        <strong>$46.000</strong>
+        <strong>{{ featuredPrices[2] }}</strong>
       </div>
     </article>
   </div>
