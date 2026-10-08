@@ -6,10 +6,7 @@
 
 <main>
   @if (view() === 'inicio') {
-    <app-inicio
-      (navigate)="navigate($event)"
-      (addRequested)="addToBag($event)"
-    />
+    <app-inicio (navigate)="navigate($event)" />
   } @else if (view() === 'catalogo') {
     @defer (when view() === 'catalogo') {
       <app-catalogo
