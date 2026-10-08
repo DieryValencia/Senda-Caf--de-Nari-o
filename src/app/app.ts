@@ -3,6 +3,8 @@ import { COFFEES, Coffee, VarietyGroup } from './coffee.data';
 import { CartStore } from './cart/cart.store';
 import { Bag } from './pages/bag/bag';
 import { Checkout } from './pages/checkout/checkout';
+import { Confirmation } from './pages/confirmation/confirmation';
+import type { ConfirmedOrder } from './pages/confirmation/confirmation';
 import { BottomNav } from './layout/bottom-nav/bottom-nav';
 import { Footer } from './layout/footer/footer';
 import { Header } from './layout/header/header';
@@ -11,11 +13,11 @@ import { Detalle } from './pages/detalle/detalle';
 import { Inicio } from './pages/inicio/inicio';
 import { Origen } from './pages/origen/origen';
 
-type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout';
+type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout' | 'confirmation';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, Origen, Bag, Checkout],
+  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, Origen, Bag, Checkout, Confirmation],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +26,7 @@ export class App {
   readonly cart = inject(CartStore);
   readonly view = signal<View>('inicio');
   readonly bagOpen = signal(false);
+  readonly confirmedOrder = signal<ConfirmedOrder | null>(null);
   readonly coffees = COFFEES;
   readonly selectedGroup = signal<VarietyGroup>('Todas');
   readonly selectedCoffee = signal<Coffee>(COFFEES[0]);
@@ -58,6 +61,21 @@ export class App {
 
   backToBag(): void {
     this.bagOpen.set(true);
+  }
+
+  confirmOrder(): void {
+    const items = this.cart.items();
+    if (items.length === 0) {
+      return;
+    }
+
+    this.confirmedOrder.set({
+      items: items.map((line) => ({ ...line })),
+      subtotal: this.cart.subtotal(),
+      shipping: this.cart.shipping(),
+      total: this.cart.total(),
+    });
+    this.navigate('confirmation');
   }
 
   openCoffee(coffee: Coffee): void {
