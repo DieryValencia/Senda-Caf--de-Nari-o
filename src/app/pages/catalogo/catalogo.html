@@ -19,6 +19,10 @@
 
 <section class="product-grid catalog-grid section-shell" aria-label="Cafés de Nariño">
   @for (coffee of coffees(); track coffee.id) {
-    <app-coffee-card [coffee]="coffee" (viewRequested)="coffeeSelected.emit($event)" />
+    <app-coffee-card
+      [coffee]="coffee"
+      (viewRequested)="coffeeSelected.emit($event)"
+      (addRequested)="addRequested.emit($event)"
+    />
   }
 </section>

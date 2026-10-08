@@ -13,4 +13,5 @@ import { Traceability } from './traceability';
 export class Detalle {
   readonly coffee = input.required<Coffee>();
   readonly backRequested = output<void>();
+  readonly addRequested = output<Coffee>();
 }

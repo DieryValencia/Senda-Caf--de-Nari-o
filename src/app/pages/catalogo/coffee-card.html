@@ -15,6 +15,16 @@
       (click)="viewRequested.emit(coffee())"
     ></button>
     <span>{{ coffee().group }}</span>
+    <button
+      class="quick-add"
+      type="button"
+      [attr.aria-label]="'Agregar ' + coffee().name + ' a la bolsa'"
+      (click)="addRequested.emit(coffee())"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    </button>
   </div>
   <div class="product-meta">
     <small>{{ coffee().municipality }} · {{ coffee().variety }}</small>

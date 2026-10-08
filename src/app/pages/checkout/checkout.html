@@ -1,0 +1,94 @@
+<section class="checkout-shell">
+  <button class="back-link" type="button" (click)="backRequested.emit()">← Volver a la bolsa</button>
+  <div class="checkout-heading">
+    <p class="eyebrow">Senda Café de Nariño · Compra</p>
+    <h1>Finalizar<br />compra.</h1>
+  </div>
+
+  <div class="checkout-layout">
+    <div class="checkout-form-column">
+      <form class="checkout-form" novalidate>
+        <fieldset>
+          <legend><span>01</span> Datos de envío</legend>
+          <div class="field-grid">
+            <label class="field field-full">
+              <span>Nombre completo</span>
+              <input type="text" name="name" autocomplete="name" placeholder="Tu nombre" />
+            </label>
+            <label class="field">
+              <span>Correo electrónico</span>
+              <input type="email" name="email" autocomplete="email" placeholder="nombre@correo.com" />
+            </label>
+            <label class="field">
+              <span>Teléfono</span>
+              <input type="tel" name="phone" autocomplete="tel" placeholder="+57 300 000 0000" />
+            </label>
+            <label class="field field-full">
+              <span>Dirección</span>
+              <input type="text" name="address" autocomplete="street-address" placeholder="Calle, carrera, número" />
+            </label>
+            <label class="field">
+              <span>Ciudad</span>
+              <input type="text" name="city" autocomplete="address-level2" placeholder="Ciudad" />
+            </label>
+            <label class="field">
+              <span>Departamento</span>
+              <input type="text" name="department" autocomplete="address-level1" placeholder="Departamento" />
+            </label>
+          </div>
+        </fieldset>
+
+        <fieldset class="payment-section">
+          <legend><span>02</span> Método de pago</legend>
+          <div class="payment-options" role="group" aria-label="Selecciona un método de pago">
+            @for (method of paymentMethods; track method) {
+              <button
+                class="payment-option"
+                type="button"
+                [class.selected]="selectedPayment() === method"
+                [attr.aria-pressed]="selectedPayment() === method"
+                (click)="selectedPayment.set(method)"
+              >
+                <span class="radio-mark" aria-hidden="true"></span>
+                <span>{{ method }}</span>
+              </button>
+            }
+          </div>
+          <p class="payment-note">Maqueta visual. No se procesará ningún pago.</p>
+        </fieldset>
+      </form>
+    </div>
+
+    <aside class="order-summary" aria-labelledby="summary-title">
+      <h2 id="summary-title">Resumen del pedido <span>({{ cart.itemCount() }})</span></h2>
+      @if (cart.items().length > 0) {
+        <div class="summary-items">
+          @for (line of cart.items(); track line.coffee.id) {
+            <article class="summary-item">
+              <img [src]="line.coffee.cardImage" [alt]="'Café ' + line.coffee.name" width="64" height="64" />
+              <div>
+                <h3>{{ line.coffee.name }}</h3>
+                <p>{{ line.quantity }} × {{ line.coffee.price | coffeePrice }}</p>
+              </div>
+              <strong>{{ line.coffee.price * line.quantity | coffeePrice }}</strong>
+            </article>
+          }
+        </div>
+        <dl class="summary-totals">
+          <div><dt>Subtotal</dt><dd>{{ cart.subtotal() | coffeePrice }}</dd></div>
+          <div><dt>Envío</dt><dd>{{ cart.shipping() === 0 ? 'Gratis' : (cart.shipping() | coffeePrice) }}</dd></div>
+          <div class="summary-total"><dt>Total</dt><dd>{{ cart.total() | coffeePrice }}</dd></div>
+        </dl>
+      } @else {
+        <p class="empty-summary">Tu bolsa está vacía.</p>
+      }
+      <button
+        class="pay-button"
+        type="button"
+        [disabled]="cart.itemCount() === 0"
+        (click)="payRequested.emit()"
+      >Pagar <span aria-hidden="true">→</span></button>
+      <p class="secure-note">Compra de demostración · Sin transacción real</p>
+    </aside>
+  </div>
+</section>

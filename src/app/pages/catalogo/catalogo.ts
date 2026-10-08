@@ -15,5 +15,6 @@ export class Catalogo {
   readonly selectedGroup = input.required<VarietyGroup>();
   readonly groupSelected = output<VarietyGroup>();
   readonly coffeeSelected = output<Coffee>();
+  readonly addRequested = output<Coffee>();
   readonly groups = VARIETY_GROUPS;
 }

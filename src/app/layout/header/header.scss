@@ -135,7 +135,7 @@
 }
 
 .bag-button {
-  text-decoration: none;
+  padding: 0;
 }
 
 .bag-button svg,
@@ -146,6 +146,21 @@
   stroke-width: 1.7;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+.bag-count {
+  position: absolute;
+  top: 1px;
+  right: 0;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 50%;
+  background: $green;
+  color: $white;
+  font-size: 10px;
+  line-height: 17px;
+  text-align: center;
 }
 
 .mobile-only {
