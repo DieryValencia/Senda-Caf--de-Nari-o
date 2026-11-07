@@ -1,11 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { afterEach, vi } from 'vitest';
 import { App } from './app';
+import { AuthApi } from './auth/auth-api';
+import { MockAuthApi } from './auth/mock-auth-api';
 
 describe('App', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
+      providers: [{ provide: AuthApi, useClass: MockAuthApi }],
     }).compileComponents();
   });
 
