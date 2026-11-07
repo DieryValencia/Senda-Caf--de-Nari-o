@@ -11,13 +11,15 @@ import { Header } from './layout/header/header';
 import { Catalogo } from './pages/catalogo/catalogo';
 import { Detalle } from './pages/detalle/detalle';
 import { Inicio } from './pages/inicio/inicio';
+import { LoginComponent } from './auth/login.component';
 import { Origen } from './pages/origen/origen';
+import { RegisterComponent } from './auth/register.component';
 
-type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout' | 'confirmation';
+type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout' | 'confirmation' | 'login' | 'register';
 
 @Component({
   selector: 'app-root',
-  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, Origen, Bag, Checkout, Confirmation],
+  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, LoginComponent, Origen, RegisterComponent, Bag, Checkout, Confirmation],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

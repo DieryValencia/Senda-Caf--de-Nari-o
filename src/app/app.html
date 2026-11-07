@@ -34,6 +34,10 @@
     @defer (when view() === 'confirmation') {
       <app-confirmation [order]="confirmedOrder()" (homeRequested)="navigate('inicio')" />
     }
+  } @else if (view() === 'login') {
+    <app-login (authenticated)="navigate('catalogo')" (goToRegister)="navigate('register')" />
+  } @else if (view() === 'register') {
+    <app-register (authenticated)="navigate('catalogo')" (goToLogin)="navigate('login')" />
   } @else {
     <app-origen />
   }
