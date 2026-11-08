@@ -30,7 +30,6 @@ export class Checkout {
   readonly backRequested = output<void>();
   readonly checkoutRequested = output<PaymentMethod>();
   readonly loginRequested = output<void>();
-  readonly submitting = signal(false);
   readonly submitted = signal(false);
   readonly errorMessage = signal('');
   readonly selectedPaymentMethod = signal<PaymentMethod>('pse');
@@ -95,7 +94,7 @@ export class Checkout {
       return '';
     }
 
-    return 'Este dato de demostración es obligatorio.';
+    return 'Este campo es obligatorio.';
   }
 
   private requiredPaymentFields(): (keyof SimulatedPaymentDetails)[] {
@@ -126,10 +125,6 @@ export class Checkout {
   }
 
   startPayment(): void {
-    if (this.submitting()) {
-      return;
-    }
-
     this.errorMessage.set('');
     if (this.cart.items().length === 0) {
       this.errorMessage.set('Tu bolsa está vacía. Agrega un café antes de continuar.');
@@ -138,9 +133,7 @@ export class Checkout {
     this.submitted.set(true);
     if (!this.isShippingValid() || !this.isPaymentDetailsValid()) {
       if (this.isShippingValid()) {
-        this.errorMessage.set(
-          'Completa los datos de demostración del método de pago seleccionado.',
-        );
+        this.errorMessage.set('Completa los datos del método de pago seleccionado.');
       }
       return;
     }
