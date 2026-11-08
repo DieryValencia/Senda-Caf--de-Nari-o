@@ -30,7 +30,6 @@ export class App {
   readonly view = signal<View>('inicio');
   readonly bagOpen = signal(false);
   readonly confirmedOrder = signal<ConfirmedOrder | null>(null);
-  readonly selectedPaymentMethod = signal<PaymentMethod>('pse');
   readonly coffees = COFFEES;
   readonly selectedGroup = signal<VarietyGroup>('Todas');
   readonly selectedCoffee = signal<Coffee>(COFFEES[0]);
@@ -73,7 +72,6 @@ export class App {
       return;
     }
 
-    this.selectedPaymentMethod.set(paymentMethod);
     this.confirmedOrder.set({
       reference: `SN-${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
       items: items.map((line) => ({ ...line })),
