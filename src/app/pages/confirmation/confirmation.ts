@@ -1,12 +1,15 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CartLine } from '../../cart/cart.store';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import type { CartLine } from '../../cart/cart.store';
+import type { PaymentMethod } from '../../cart/purchase.models';
 import { CoffeePricePipe } from '../../coffee-price.pipe';
 
 export interface ConfirmedOrder {
+  readonly reference: string;
   readonly items: readonly CartLine[];
   readonly subtotal: number;
   readonly shipping: number;
   readonly total: number;
+  readonly paymentMethod: PaymentMethod;
 }
 
 @Component({
@@ -18,6 +21,10 @@ export interface ConfirmedOrder {
 })
 export class Confirmation {
   readonly order = input<ConfirmedOrder | null>(null);
-  readonly orderNumber = 'SN-03621362';
+  readonly trackingExpanded = signal(false);
   readonly homeRequested = output<void>();
+
+  paymentMethodLabel(method: PaymentMethod): string {
+    return { pse: 'PSE', card: 'Tarjeta', nequi: 'Nequi' }[method];
+  }
 }

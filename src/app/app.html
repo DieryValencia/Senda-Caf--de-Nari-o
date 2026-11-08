@@ -30,7 +30,7 @@
     @defer (when view() === 'checkout') {
       <app-checkout
         (backRequested)="backToBag()"
-        (payRequested)="confirmOrder()"
+        (checkoutRequested)="confirmOrder($event)"
         (loginRequested)="navigate('login')"
       />
     }

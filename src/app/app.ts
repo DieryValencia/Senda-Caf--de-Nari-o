@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { COFFEES, Coffee, VarietyGroup } from './coffee.data';
 import { CartStore } from './cart/cart.store';
+import type { PaymentMethod } from './cart/purchase.models';
 import { Bag } from './pages/bag/bag';
 import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
@@ -65,18 +66,21 @@ export class App {
     this.bagOpen.set(true);
   }
 
-  confirmOrder(): void {
+  confirmOrder(paymentMethod: PaymentMethod): void {
     const items = this.cart.items();
     if (items.length === 0) {
       return;
     }
 
     this.confirmedOrder.set({
+      reference: `SN-${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
       items: items.map((line) => ({ ...line })),
       subtotal: this.cart.subtotal(),
       shipping: this.cart.shipping(),
       total: this.cart.total(),
+      paymentMethod,
     });
+    this.cart.clear();
     this.navigate('confirmation');
   }
 

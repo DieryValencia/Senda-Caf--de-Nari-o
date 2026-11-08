@@ -39,4 +39,12 @@ describe('CartStore', () => {
     expect(cart.items()).toEqual([]);
     expect(cart.total()).toBe(0);
   });
+
+  it('clears the bag after completing a simulated order', () => {
+    cart.add(COFFEES[0]);
+    cart.clear();
+
+    expect(cart.items()).toEqual([]);
+    expect(cart.total()).toBe(0);
+  });
 });

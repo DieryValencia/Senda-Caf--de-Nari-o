@@ -58,4 +58,8 @@ export class CartStore {
   remove(coffeeId: number): void {
     this.items.update((items) => items.filter((line) => line.coffee.id !== coffeeId));
   }
+
+  clear(): void {
+    this.items.set([]);
+  }
 }

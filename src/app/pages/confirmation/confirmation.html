@@ -1,60 +1,122 @@
-@if (order(); as confirmedOrder) {
 <section class="confirmation-shell" aria-labelledby="confirmation-title">
   <div class="confirmation-content">
-    <div class="success-mark" aria-hidden="true">
-      <svg viewBox="0 0 24 24" fill="none">
-        <path d="m5 12.5 4.2 4.2L19 7" />
-      </svg>
-    </div>
-
-    <p class="eyebrow">Senda Café de Nariño</p>
-    <h1 id="confirmation-title">Pedido<br />confirmado.</h1>
-    <p class="confirmation-copy">Gracias por elegir café de Nariño. Aquí está el resumen de tu compra.</p>
-
-    <div class="order-number">
-      <span>Número de pedido</span>
-      <strong>{{ orderNumber }}</strong>
-    </div>
-
-    <section class="order-summary" aria-labelledby="summary-title">
-      <h2 id="summary-title">Resumen del pedido</h2>
-      <div class="summary-items">
-        @for (line of confirmedOrder.items; track line.coffee.id) {
-          <article class="summary-item">
-            <img
-              [src]="line.coffee.cardImage"
-              [alt]="'Café ' + line.coffee.name"
-              width="56"
-              height="56"
-            />
-            <div class="item-description">
-              <h3>{{ line.coffee.name }}</h3>
-              <p>{{ line.quantity }} × {{ line.coffee.price | coffeePrice }}</p>
-            </div>
-            <strong>{{ line.coffee.price * line.quantity | coffeePrice }}</strong>
-          </article>
-        }
+    @if (order(); as confirmedOrder) {
+      <div class="success-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="m5 12.5 4.2 4.2L19 7" />
+        </svg>
       </div>
 
-      <dl class="summary-totals">
-        <div>
-          <dt>Subtotal</dt>
-          <dd>{{ confirmedOrder.subtotal | coffeePrice }}</dd>
+      <p class="eyebrow">Senda Café de Nariño</p>
+      <h1 id="confirmation-title">Pedido<br />confirmado.</h1>
+      <p class="confirmation-copy">
+        Tu compra quedó registrada. Gracias por elegir café de Nariño.
+      </p>
+
+      <div class="order-number">
+        <span>Número de pedido</span>
+        <strong>{{ confirmedOrder.reference }}</strong>
+      </div>
+
+      <section class="order-summary" aria-labelledby="summary-title">
+        <h2 id="summary-title">Resumen del pedido</h2>
+        <div class="summary-items">
+          @for (line of confirmedOrder.items; track line.coffee.id) {
+            <article class="summary-item">
+              <img
+                [src]="line.coffee.cardImage"
+                [alt]="'Café ' + line.coffee.name"
+                width="56"
+                height="56"
+              />
+              <div class="item-description">
+                <h3>{{ line.coffee.name }}</h3>
+                <p>{{ line.quantity }} × {{ line.coffee.price | coffeePrice }}</p>
+              </div>
+              <strong>{{ line.coffee.price * line.quantity | coffeePrice }}</strong>
+            </article>
+          }
         </div>
-        <div>
-          <dt>Envío</dt>
-          <dd>{{ confirmedOrder.shipping === 0 ? 'Gratis' : (confirmedOrder.shipping | coffeePrice) }}</dd>
-        </div>
-        <div class="summary-total">
-          <dt>Total</dt>
-          <dd>{{ confirmedOrder.total | coffeePrice }}</dd>
-        </div>
-      </dl>
-    </section>
-    <p class="demo-note">Confirmación de demostración · No se procesó ningún pago.</p>
+
+        <dl class="summary-totals">
+          <div>
+            <dt>Subtotal</dt>
+            <dd>{{ confirmedOrder.subtotal | coffeePrice }}</dd>
+          </div>
+          <div>
+            <dt>Envío</dt>
+            <dd>{{ confirmedOrder.shipping === 0 ? 'Gratis' : (confirmedOrder.shipping | coffeePrice) }}</dd>
+          </div>
+          <div class="summary-total">
+            <dt>Total</dt>
+            <dd>{{ confirmedOrder.total | coffeePrice }}</dd>
+          </div>
+          <div>
+            <dt>Método de pago</dt>
+            <dd>{{ paymentMethodLabel(confirmedOrder.paymentMethod) }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <button
+        class="tracking-toggle"
+        type="button"
+        [attr.aria-expanded]="trackingExpanded()"
+        aria-controls="order-tracking"
+        (click)="trackingExpanded.update((expanded) => !expanded)"
+      >
+        <span>{{ trackingExpanded() ? 'Ocultar seguimiento' : 'Seguir pedido' }}</span>
+        <span class="tracking-chevron" [class.is-expanded]="trackingExpanded()" aria-hidden="true">⌄</span>
+      </button>
+      @if (trackingExpanded()) {
+        <section id="order-tracking" class="tracking-panel" aria-labelledby="tracking-title">
+          <div class="tracking-heading">
+            <div>
+              <p class="tracking-eyebrow">PEDIDO {{ confirmedOrder.reference }}</p>
+              <h2 id="tracking-title">Seguimiento</h2>
+            </div>
+            <span class="tracking-status"><span aria-hidden="true"></span>En preparación</span>
+          </div>
+          <ol class="tracking-timeline">
+            <li class="is-complete">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>Pedido confirmado</h3>
+                <p>Recibimos tu pedido correctamente.</p>
+              </div>
+            </li>
+            <li class="is-current" aria-current="step">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>Preparando tu café</h3>
+                <p>Estamos organizando tu pedido con cuidado.</p>
+              </div>
+            </li>
+            <li class="is-upcoming">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>En camino</h3>
+                <p>Te avisaremos cuando salga hacia tu dirección.</p>
+              </div>
+            </li>
+            <li class="is-upcoming">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>Entregado</h3>
+                <p>Disfruta tu café de Nariño.</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+      }
+    } @else {
+      <p class="eyebrow">Senda Café de Nariño</p>
+      <h1 id="confirmation-title">Aún no hay<br />un pedido.</h1>
+      <p class="confirmation-copy">Completa el checkout para ver el resumen de tu pedido.</p>
+    }
+
     <button class="home-button" type="button" (click)="homeRequested.emit()">
       Volver al inicio <span aria-hidden="true">→</span>
     </button>
   </div>
 </section>
-}

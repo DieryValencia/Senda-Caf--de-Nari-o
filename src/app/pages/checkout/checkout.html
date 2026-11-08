@@ -13,7 +13,12 @@
 
     <div class="checkout-layout">
       <div class="checkout-form-column">
-        <form class="checkout-form" novalidate>
+        <form
+          id="checkout-form"
+          class="checkout-form"
+          novalidate
+          (ngSubmit)="startPayment()"
+        >
           <fieldset>
             <legend><span>01</span> Datos de envío</legend>
             <div class="field-grid">
@@ -22,74 +27,234 @@
                 <input
                   type="text"
                   name="name"
+                  [(ngModel)]="shippingForm.name"
                   autocomplete="name"
-                  [(ngModel)]="userName"
+                  maxlength="120"
                   placeholder="Tu nombre"
                 />
+                @if (fieldError('name'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Correo electrónico</span>
                 <input
                   type="email"
                   name="email"
+                  [(ngModel)]="shippingForm.email"
                   autocomplete="email"
-                  [(ngModel)]="userEmail"
+                  maxlength="254"
                   placeholder="nombre@correo.com"
                 />
+                @if (fieldError('email'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Teléfono</span>
-                <input type="tel" name="phone" autocomplete="tel" placeholder="+57 300 000 0000" />
+                <input
+                  type="tel"
+                  name="phone"
+                  [(ngModel)]="shippingForm.phone"
+                  autocomplete="tel"
+                  maxlength="30"
+                  placeholder="+57 300 000 0000"
+                />
+                @if (fieldError('phone'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field field-full">
                 <span>Dirección</span>
                 <input
                   type="text"
                   name="address"
+                  [(ngModel)]="shippingForm.address"
                   autocomplete="street-address"
+                  maxlength="180"
                   placeholder="Calle, carrera, número"
                 />
+                @if (fieldError('address'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Ciudad</span>
                 <input
                   type="text"
                   name="city"
+                  [(ngModel)]="shippingForm.city"
                   autocomplete="address-level2"
+                  maxlength="100"
                   placeholder="Ciudad"
                 />
+                @if (fieldError('city'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Departamento</span>
                 <input
                   type="text"
                   name="department"
+                  [(ngModel)]="shippingForm.department"
                   autocomplete="address-level1"
+                  maxlength="100"
                   placeholder="Departamento"
                 />
+                @if (fieldError('department'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
             </div>
           </fieldset>
 
           <fieldset class="payment-section">
             <legend><span>02</span> Método de pago</legend>
-            <div class="payment-options" role="group" aria-label="Selecciona un método de pago">
-              @for (method of paymentMethods; track method) {
+            <p class="payment-note">Selecciona tu forma de pago.</p>
+            <div class="payment-methods" role="group" aria-label="Forma de pago">
+              @for (method of paymentMethods; track method.id) {
                 <button
-                  class="payment-option"
                   type="button"
-                  [class.selected]="selectedPayment() === method"
-                  [attr.aria-pressed]="selectedPayment() === method"
-                  (click)="selectedPayment.set(method)"
+                  class="payment-method"
+                  [class.selected]="selectedPaymentMethod() === method.id"
+                  [attr.aria-pressed]="selectedPaymentMethod() === method.id"
+                  (click)="selectedPaymentMethod.set(method.id)"
                 >
-                  <span class="radio-mark" aria-hidden="true"></span>
-                  <span>{{ method }}</span>
+                  {{ method.label }}
                 </button>
               }
             </div>
-            <p class="payment-note">Maqueta visual. No se procesará ningún pago.</p>
+            @switch (selectedPaymentMethod()) {
+              @case ('pse') {
+                <div class="payment-fields">
+                  <label class="field">
+                    <span>Banco</span>
+                    <select name="bank" [(ngModel)]="paymentDetails.bank">
+                      <option value="">Selecciona un banco</option>
+                      <option value="bancolombia">Bancolombia</option>
+                      <option value="banco-bogota">Banco de Bogotá</option>
+                      <option value="davivienda">Davivienda</option>
+                    </select>
+                    @if (paymentFieldError('bank'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Tipo de documento</span>
+                    <select name="documentType" [(ngModel)]="paymentDetails.documentType">
+                      <option value="">Selecciona un tipo</option>
+                      <option value="cc">Cédula de ciudadanía</option>
+                      <option value="ce">Cédula de extranjería</option>
+                      <option value="nit">NIT</option>
+                    </select>
+                    @if (paymentFieldError('documentType'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Número de documento</span>
+                    <input
+                      type="text"
+                      name="documentNumber"
+                      [(ngModel)]="paymentDetails.documentNumber"
+                      autocomplete="off"
+                      maxlength="20"
+                      placeholder="Número de documento"
+                    />
+                    @if (paymentFieldError('documentNumber'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                </div>
+              }
+              @case ('card') {
+                <div class="payment-fields">
+                  <label class="field field-full">
+                    <span>Nombre del titular</span>
+                    <input
+                      type="text"
+                      name="cardholder"
+                      [(ngModel)]="paymentDetails.cardholder"
+                      autocomplete="off"
+                      maxlength="100"
+                      placeholder="Nombre como aparece en la tarjeta"
+                    />
+                    @if (paymentFieldError('cardholder'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field field-full">
+                    <span>Número de tarjeta</span>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      [(ngModel)]="paymentDetails.cardNumber"
+                      inputmode="numeric"
+                      autocomplete="off"
+                      maxlength="19"
+                      placeholder="Número de tarjeta"
+                    />
+                    @if (paymentFieldError('cardNumber'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Fecha de vencimiento</span>
+                    <input
+                      type="text"
+                      name="cardExpiry"
+                      [(ngModel)]="paymentDetails.cardExpiry"
+                      autocomplete="off"
+                      maxlength="7"
+                      placeholder="MM/AA"
+                    />
+                    @if (paymentFieldError('cardExpiry'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Código de seguridad</span>
+                    <input
+                      type="text"
+                      name="cardCode"
+                      [(ngModel)]="paymentDetails.cardCode"
+                      inputmode="numeric"
+                      autocomplete="off"
+                      maxlength="4"
+                      placeholder="CVV"
+                    />
+                    @if (paymentFieldError('cardCode'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                </div>
+              }
+              @case ('nequi') {
+                <div class="payment-fields">
+                  <label class="field">
+                    <span>Número de celular asociado a Nequi</span>
+                    <input
+                      type="tel"
+                      name="nequiPhone"
+                      [(ngModel)]="paymentDetails.nequiPhone"
+                      autocomplete="off"
+                      maxlength="30"
+                      placeholder="Número de celular"
+                    />
+                    @if (paymentFieldError('nequiPhone'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                </div>
+              }
+            }
           </fieldset>
         </form>
+
+        @if (errorMessage()) {
+          <p class="checkout-error" role="alert">{{ errorMessage() }}</p>
+        }
       </div>
 
       <aside class="order-summary" aria-labelledby="summary-title">
@@ -117,11 +282,13 @@
         }
         <button
           class="pay-button"
-          type="button"
+          type="submit"
+          form="checkout-form"
           [disabled]="cart.itemCount() === 0"
-          (click)="payRequested.emit()"
-        >Pagar <span aria-hidden="true">→</span></button>
-        <p class="secure-note">Compra de demostración · Sin transacción real</p>
+        >
+          Confirmar pedido
+          <span aria-hidden="true">→</span>
+        </button>
       </aside>
     </div>
   }
