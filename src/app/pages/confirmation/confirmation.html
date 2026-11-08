@@ -1,50 +1,17 @@
 <section class="confirmation-shell" aria-labelledby="confirmation-title">
   <div class="confirmation-content">
-    <div
-      class="status-mark"
-      [class.approved]="order()?.status === 'approved'"
-      [class.pending]="checking() || order()?.status === 'pending'"
-      aria-hidden="true"
-    >
-      @if (order()?.status === 'approved') {
+    @if (order(); as confirmedOrder) {
+      <div class="success-mark" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="m5 12.5 4.2 4.2L19 7" />
         </svg>
-      } @else {
-        <svg viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="8" />
-          <path d="M12 8v4l2.5 1.5" />
-        </svg>
-      }
-    </div>
+      </div>
 
-    <p class="eyebrow">Senda Café de Nariño</p>
-    @if (checking()) {
-      <h1 id="confirmation-title">Verificando<br />tu pago.</h1>
-      <p class="confirmation-copy" role="status">Consultando el estado de la transacción con Wompi…</p>
-    } @else if (order(); as confirmedOrder) {
-      @switch (confirmedOrder.status) {
-        @case ('approved') {
-          <h1 id="confirmation-title">Pedido<br />confirmado.</h1>
-          <p class="confirmation-copy">Gracias por elegir café de Nariño. Tu pago fue verificado por Wompi.</p>
-        }
-        @case ('pending') {
-          <h1 id="confirmation-title">Pago<br />pendiente.</h1>
-          <p class="confirmation-copy">Wompi aún está procesando el pago. Puedes volver a consultar el estado.</p>
-        }
-        @case ('declined') {
-          <h1 id="confirmation-title">Pago no<br />aprobado.</h1>
-          <p class="confirmation-copy">Wompi no aprobó la transacción. No se confirmó el pedido.</p>
-        }
-        @case ('cancelled') {
-          <h1 id="confirmation-title">Pago<br />cancelado.</h1>
-          <p class="confirmation-copy">La transacción fue cancelada o expiró. No se confirmó el pedido.</p>
-        }
-        @default {
-          <h1 id="confirmation-title">No se pudo<br />completar.</h1>
-          <p class="confirmation-copy">Wompi reportó un error. No se confirmó el pedido.</p>
-        }
-      }
+      <p class="eyebrow">Senda Café de Nariño</p>
+      <h1 id="confirmation-title">Pedido<br />confirmado.</h1>
+      <p class="confirmation-copy">
+        Gracias por elegir café de Nariño. Este pedido se generó como simulación; no se realizó ningún cobro.
+      </p>
 
       <div class="order-number">
         <span>Número de pedido</span>
@@ -54,14 +21,19 @@
       <section class="order-summary" aria-labelledby="summary-title">
         <h2 id="summary-title">Resumen del pedido</h2>
         <div class="summary-items">
-          @for (line of confirmedOrder.items; track line.coffeeId) {
+          @for (line of confirmedOrder.items; track line.coffee.id) {
             <article class="summary-item">
-              <img [src]="line.imageUrl" [alt]="'Café ' + line.name" width="56" height="56" />
+              <img
+                [src]="line.coffee.cardImage"
+                [alt]="'Café ' + line.coffee.name"
+                width="56"
+                height="56"
+              />
               <div class="item-description">
-                <h3>{{ line.name }}</h3>
-                <p>{{ line.quantity }} × {{ line.unitPrice | coffeePrice }}</p>
+                <h3>{{ line.coffee.name }}</h3>
+                <p>{{ line.quantity }} × {{ line.coffee.price | coffeePrice }}</p>
               </div>
-              <strong>{{ line.unitPrice * line.quantity | coffeePrice }}</strong>
+              <strong>{{ line.coffee.price * line.quantity | coffeePrice }}</strong>
             </article>
           }
         </div>
@@ -76,36 +48,25 @@
             <dd>{{ confirmedOrder.shipping === 0 ? 'Gratis' : (confirmedOrder.shipping | coffeePrice) }}</dd>
           </div>
           <div class="summary-total">
-            <dt>Total</dt>
+            <dt>Total simulado</dt>
             <dd>{{ confirmedOrder.total | coffeePrice }}</dd>
+          </div>
+          <div>
+            <dt>Método seleccionado</dt>
+            <dd>{{ paymentMethodLabel(confirmedOrder.paymentMethod) }}</dd>
           </div>
         </dl>
       </section>
+
+      <p class="demo-note">Simulación visual · No se enviaron datos de pago.</p>
     } @else {
-      <h1 id="confirmation-title">No pudimos<br />verificar el pago.</h1>
-      <p class="confirmation-copy">No mostraremos el pedido como confirmado sin verificarlo con Wompi.</p>
+      <p class="eyebrow">Senda Café de Nariño</p>
+      <h1 id="confirmation-title">Aún no hay<br />un pedido.</h1>
+      <p class="confirmation-copy">Completa el checkout para ver el resumen de la simulación.</p>
     }
 
-    @if (errorMessage()) {
-      <p class="verification-error" role="alert">{{ errorMessage() }}</p>
-    }
-
-    @if (checking()) {
-      <button class="home-button" type="button" disabled>Verificando con Wompi…</button>
-    } @else if (order()?.status === 'pending') {
-      <button class="home-button" type="button" (click)="retryRequested.emit()">Consultar de nuevo</button>
-    } @else if (order()?.status === 'approved') {
-      <button class="home-button" type="button" (click)="homeRequested.emit()">
-        Volver al inicio <span aria-hidden="true">→</span>
-      </button>
-    } @else {
-      <button class="home-button" type="button" (click)="checkoutRequested.emit()">
-        Volver al checkout <span aria-hidden="true">→</span>
-      </button>
-    }
-
-    @if (order()?.status !== 'approved') {
-      <button class="text-button" type="button" (click)="homeRequested.emit()">Volver al inicio</button>
-    }
+    <button class="home-button" type="button" (click)="homeRequested.emit()">
+      Volver al inicio <span aria-hidden="true">→</span>
+    </button>
   </div>
 </section>

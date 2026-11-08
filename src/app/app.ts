@@ -1,21 +1,11 @@
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  PLATFORM_ID,
-  signal,
-} from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { COFFEES, Coffee, VarietyGroup } from './coffee.data';
 import { CartStore } from './cart/cart.store';
+import type { PaymentMethod } from './cart/purchase.models';
 import { Bag } from './pages/bag/bag';
 import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
 import type { ConfirmedOrder } from './pages/confirmation/confirmation';
-import { WompiCheckoutService } from './pages/checkout/wompi-checkout.service';
 import { BottomNav } from './layout/bottom-nav/bottom-nav';
 import { Footer } from './layout/footer/footer';
 import { Header } from './layout/header/header';
@@ -37,15 +27,10 @@ type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout' | 'confirm
 })
 export class App {
   readonly cart = inject(CartStore);
-  private readonly wompi = inject(WompiCheckoutService);
-  private readonly platformId = inject(PLATFORM_ID);
   readonly view = signal<View>('inicio');
   readonly bagOpen = signal(false);
   readonly confirmedOrder = signal<ConfirmedOrder | null>(null);
-  readonly verifyingPayment = signal(false);
-  readonly verificationError = signal('');
-  private readonly returnReference = signal('');
-  private readonly returnTransactionId = signal('');
+  readonly selectedPaymentMethod = signal<PaymentMethod>('pse');
   readonly coffees = COFFEES;
   readonly selectedGroup = signal<VarietyGroup>('Todas');
   readonly selectedCoffee = signal<Coffee>(COFFEES[0]);
@@ -54,12 +39,6 @@ export class App {
       ? this.coffees
       : this.coffees.filter((coffee) => coffee.group === this.selectedGroup()),
   );
-
-  constructor() {
-    if (isPlatformBrowser(this.platformId)) {
-      afterNextRender(() => this.processWompiReturn());
-    }
-  }
 
   navigate(view: View): void {
     this.view.set(view);
@@ -88,70 +67,23 @@ export class App {
     this.bagOpen.set(true);
   }
 
-  redirectToWompi(checkoutUrl: string): void {
-    window.location.assign(checkoutUrl);
-  }
-
-  retryPaymentVerification(): void {
-    if (this.returnReference() && this.returnTransactionId()) {
-      void this.verifyPayment();
+  confirmOrder(paymentMethod: PaymentMethod): void {
+    const items = this.cart.items();
+    if (items.length === 0) {
       return;
     }
 
-    this.verificationError.set('No recibimos el identificador de transacción de Wompi.');
-  }
-
-  private processWompiReturn(): void {
-    const url = new URL(window.location.href);
-    const reference = url.searchParams.get('wompiReference');
-    if (!reference) {
-      return;
-    }
-
-    this.returnReference.set(reference);
-    this.returnTransactionId.set(
-      url.searchParams.get('id') ?? url.searchParams.get('transaction_id') ?? '',
-    );
-    this.view.set('confirmation');
-
-    if (!this.returnTransactionId()) {
-      this.verificationError.set('No recibimos el identificador de transacción de Wompi.');
-      return;
-    }
-    void this.verifyPayment();
-  }
-
-  private async verifyPayment(): Promise<void> {
-    this.verifyingPayment.set(true);
-    this.verificationError.set('');
-    try {
-      const response = await this.wompi.verifyTransaction(
-        this.returnReference(),
-        this.returnTransactionId(),
-      );
-      this.confirmedOrder.set({
-        ...response.order,
-        status: response.status,
-        transactionId: response.transactionId,
-      });
-      this.cart.restore(
-        response.order.items.map((line) => {
-          const coffee = COFFEES.find((entry) => entry.id === line.coffeeId);
-          if (!coffee) {
-            throw new Error('Wompi devolvió un producto que no está en el catálogo.');
-          }
-          return { coffee: { ...coffee, price: line.unitPrice }, quantity: line.quantity };
-        }),
-      );
-    } catch (error) {
-      this.verificationError.set(
-        error instanceof HttpErrorResponse && typeof error.error?.message === 'string'
-          ? error.error.message
-          : 'No pudimos verificar el pago con Wompi. Intenta consultar de nuevo.',
-      );
-    } finally {
-      this.verifyingPayment.set(false);
-    }
+    this.selectedPaymentMethod.set(paymentMethod);
+    this.confirmedOrder.set({
+      reference: `SN-${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
+      items: items.map((line) => ({ ...line })),
+      subtotal: this.cart.subtotal(),
+      shipping: this.cart.shipping(),
+      total: this.cart.total(),
+      paymentMethod,
+    });
+    this.cart.clear();
+    this.navigate('confirmation');
   }
 
   openCoffee(coffee: Coffee): void {

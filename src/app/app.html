@@ -30,20 +30,13 @@
     @defer (when view() === 'checkout') {
       <app-checkout
         (backRequested)="backToBag()"
-        (checkoutRequested)="redirectToWompi($event)"
+        (checkoutRequested)="confirmOrder($event)"
         (loginRequested)="navigate('login')"
       />
     }
   } @else if (view() === 'confirmation') {
     @defer (when view() === 'confirmation') {
-      <app-confirmation
-        [order]="confirmedOrder()"
-        [checking]="verifyingPayment()"
-        [errorMessage]="verificationError()"
-        (retryRequested)="retryPaymentVerification()"
-        (checkoutRequested)="navigate('checkout')"
-        (homeRequested)="navigate('inicio')"
-      />
+      <app-confirmation [order]="confirmedOrder()" (homeRequested)="navigate('inicio')" />
     }
   } @else if (view() === 'login') {
     <app-login (authenticated)="navigate('catalogo')" (goToRegister)="navigate('register')" />

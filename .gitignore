@@ -39,11 +39,6 @@ testem.log
 /typings
 __screenshots__/
 
-# Local payment-provider credentials
-.env
-.env.*
-!.env.example
-
 # System files
 .DS_Store
 Thumbs.db

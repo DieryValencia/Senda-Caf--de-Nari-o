@@ -9,19 +9,12 @@ describe('Confirmation', () => {
 
   beforeEach(async () => {
     order = {
-      reference: 'SN-TEST-ORDER',
-      items: [{
-        coffeeId: COFFEES[0].id,
-        name: COFFEES[0].name,
-        quantity: 2,
-        unitPrice: COFFEES[0].price,
-        imageUrl: COFFEES[0].cardImage,
-      }],
+      reference: 'SN-03621362',
+      items: [{ coffee: COFFEES[0], quantity: 2 }],
       subtotal: COFFEES[0].price * 2,
       shipping: 0,
       total: COFFEES[0].price * 2,
-      status: 'approved',
-      transactionId: 'transaction-123',
+      paymentMethod: 'nequi',
     };
 
     await TestBed.configureTestingModule({
@@ -33,25 +26,25 @@ describe('Confirmation', () => {
     fixture.detectChanges();
   });
 
-  it('shows an approved order only after server verification', () => {
+  it('shows the simulated order reference, summary and selected payment method', () => {
     const content = fixture.nativeElement.textContent as string;
 
     expect(content).toContain('Pedido');
-    expect(content).toContain('SN-TEST-ORDER');
+    expect(content).toContain('confirmado.');
+    expect(content).toContain('SN-03621362');
     expect(content).toContain('Caturra');
     expect(content).toContain('Gratis');
-    expect(content).toContain('Tu pago fue verificado por Wompi');
+    expect(content).toContain('Nequi');
+    expect(content).toContain('no se realizó ningún cobro');
   });
 
-  it('shows pending orders without presenting them as confirmed', () => {
-    fixture.componentRef.setInput('order', { ...order, status: 'pending' });
+  it('does not present an empty confirmation as a completed order', () => {
+    fixture.componentRef.setInput('order', null);
     fixture.detectChanges();
 
     const content = fixture.nativeElement.textContent as string;
-    expect(content).toContain('Pago');
-    expect(content).toContain('pendiente.');
+    expect(content).toContain('Aún no hay');
     expect(content).not.toContain('Pedido confirmado');
-    expect(content).toContain('Consultar de nuevo');
   });
 
   it('emits a request to return home', () => {
