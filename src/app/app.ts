@@ -1,9 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { COFFEES, Coffee, VarietyGroup } from './coffee.data';
 import { CartStore } from './cart/cart.store';
+import type { PaymentMethod } from './cart/purchase.models';
 import { Bag } from './pages/bag/bag';
 import { Checkout } from './pages/checkout/checkout';
 import { Confirmation } from './pages/confirmation/confirmation';
+import type { ConfirmedOrder } from './pages/confirmation/confirmation';
 import { BottomNav } from './layout/bottom-nav/bottom-nav';
 import { Footer } from './layout/footer/footer';
 import { Header } from './layout/header/header';
@@ -27,6 +29,8 @@ export class App {
   readonly cart = inject(CartStore);
   readonly view = signal<View>('inicio');
   readonly bagOpen = signal(false);
+  readonly confirmedOrder = signal<ConfirmedOrder | null>(null);
+  readonly selectedPaymentMethod = signal<PaymentMethod>('pse');
   readonly coffees = COFFEES;
   readonly selectedGroup = signal<VarietyGroup>('Todas');
   readonly selectedCoffee = signal<Coffee>(COFFEES[0]);
@@ -63,8 +67,20 @@ export class App {
     this.bagOpen.set(true);
   }
 
-  redirectToWompi(checkoutUrl: string): void {
-    window.location.assign(checkoutUrl);
+  confirmOrder(paymentMethod: PaymentMethod): void {
+    const items = this.cart.items();
+    if (items.length === 0) {
+      return;
+    }
+
+    this.selectedPaymentMethod.set(paymentMethod);
+    this.confirmedOrder.set({
+      items: items.map((line) => ({ ...line })),
+      subtotal: this.cart.subtotal(),
+      shipping: this.cart.shipping(),
+      total: this.cart.total(),
+    });
+    this.navigate('confirmation');
   }
 
   openCoffee(coffee: Coffee): void {

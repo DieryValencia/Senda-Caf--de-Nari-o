@@ -1,11 +1,9 @@
-import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, inject, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartStore } from '../../cart/cart.store';
 import { AuthService } from '../../auth/auth.service';
 import { CoffeePricePipe } from '../../coffee-price.pipe';
-import type { ShippingDetails } from '../../cart/purchase.models';
-import { WompiCheckoutService } from './wompi-checkout.service';
+import type { PaymentMethod, ShippingDetails } from '../../cart/purchase.models';
 
 @Component({
   selector: 'app-checkout',
@@ -18,13 +16,18 @@ import { WompiCheckoutService } from './wompi-checkout.service';
 export class Checkout {
   readonly cart = inject(CartStore);
   readonly auth = inject(AuthService);
-  private readonly wompi = inject(WompiCheckoutService);
   readonly backRequested = output<void>();
-  readonly checkoutRequested = output<string>();
+  readonly checkoutRequested = output<PaymentMethod>();
   readonly loginRequested = output<void>();
   readonly submitting = signal(false);
   readonly submitted = signal(false);
   readonly errorMessage = signal('');
+  readonly selectedPaymentMethod = signal<PaymentMethod>('pse');
+  readonly paymentMethods: readonly { id: PaymentMethod; label: string }[] = [
+    { id: 'pse', label: 'PSE' },
+    { id: 'card', label: 'Tarjeta' },
+    { id: 'nequi', label: 'Nequi' },
+  ];
   readonly shippingForm = {
     name: this.auth.user()?.name ?? '',
     email: this.auth.user()?.email ?? '',
@@ -73,7 +76,7 @@ export class Checkout {
     );
   }
 
-  async startPayment(): Promise<void> {
+  startPayment(): void {
     if (this.submitting()) {
       return;
     }
@@ -88,31 +91,6 @@ export class Checkout {
       return;
     }
 
-    this.submitting.set(true);
-    try {
-      const response = await this.wompi.createOrder({
-        shipping: { ...this.shippingForm },
-        items: this.cart.items().map(({ coffee, quantity }) => ({
-          coffeeId: coffee.id,
-          quantity,
-        })),
-      });
-
-      const checkoutUrl = new URL(response.checkoutUrl);
-      if (checkoutUrl.origin !== 'https://checkout.wompi.co') {
-        this.errorMessage.set('El servidor devolvió una dirección de pago no válida.');
-        return;
-      }
-
-      this.checkoutRequested.emit(checkoutUrl.toString());
-    } catch (error) {
-      this.errorMessage.set(
-        error instanceof HttpErrorResponse && typeof error.error?.message === 'string'
-          ? error.error.message
-          : 'No pudimos iniciar el pago con Wompi. Intenta de nuevo.',
-      );
-    } finally {
-      this.submitting.set(false);
-    }
+    this.checkoutRequested.emit(this.selectedPaymentMethod());
   }
 }

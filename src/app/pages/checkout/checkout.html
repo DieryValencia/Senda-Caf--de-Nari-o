@@ -111,15 +111,21 @@
 
           <fieldset class="payment-section">
             <legend><span>02</span> Método de pago</legend>
-            <p class="payment-note">
-              Elige de forma segura tu medio de pago en Wompi. Allí podrás pagar con:
-            </p>
-            <ul class="payment-methods" aria-label="Medios de pago disponibles en Wompi">
-              <li>PSE</li>
-              <li>Tarjeta</li>
-              <li>Nequi</li>
-            </ul>
-            <p class="payment-note">Senda no recibe ni almacena datos de tarjeta.</p>
+            <p class="payment-note">Selecciona un medio para la simulación del pedido.</p>
+            <div class="payment-methods" role="group" aria-label="Método de pago simulado">
+              @for (method of paymentMethods; track method.id) {
+                <button
+                  type="button"
+                  class="payment-method"
+                  [class.selected]="selectedPaymentMethod() === method.id"
+                  [attr.aria-pressed]="selectedPaymentMethod() === method.id"
+                  (click)="selectedPaymentMethod.set(method.id)"
+                >
+                  {{ method.label }}
+                </button>
+              }
+            </div>
+            <p class="payment-note">Demostración visual: no se realiza ningún cobro ni se envían datos.</p>
           </fieldset>
         </form>
 
@@ -157,10 +163,10 @@
           form="checkout-form"
           [disabled]="cart.itemCount() === 0 || submitting()"
         >
-          {{ submitting() ? 'Conectando con Wompi…' : 'Continuar a Wompi' }}
+          {{ submitting() ? 'Procesando pedido…' : 'Pagar (simulación)' }}
           <span aria-hidden="true">→</span>
         </button>
-        <p class="secure-note">Pago procesado de forma segura por Wompi en modo sandbox.</p>
+        <p class="secure-note">Este flujo es una simulación; no se procesará un pago real.</p>
       </aside>
     </div>
   }
