@@ -39,4 +39,12 @@ describe('CartStore', () => {
     expect(cart.items()).toEqual([]);
     expect(cart.total()).toBe(0);
   });
+
+  it('restores a verified order after returning from hosted checkout', () => {
+    cart.add(COFFEES[1]);
+    cart.restore([{ coffee: COFFEES[0], quantity: 2 }]);
+
+    expect(cart.items()).toEqual([{ coffee: COFFEES[0], quantity: 2 }]);
+    expect(cart.subtotal()).toBe(COFFEES[0].price * 2);
+  });
 });

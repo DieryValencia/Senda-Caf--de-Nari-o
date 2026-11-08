@@ -1,12 +1,10 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CartLine } from '../../cart/cart.store';
+import { PaymentStatus, PurchaseSummary } from '../../cart/purchase.models';
 import { CoffeePricePipe } from '../../coffee-price.pipe';
 
-export interface ConfirmedOrder {
-  readonly items: readonly CartLine[];
-  readonly subtotal: number;
-  readonly shipping: number;
-  readonly total: number;
+export interface ConfirmedOrder extends PurchaseSummary {
+  readonly status: PaymentStatus;
+  readonly transactionId: string;
 }
 
 @Component({
@@ -18,6 +16,9 @@ export interface ConfirmedOrder {
 })
 export class Confirmation {
   readonly order = input<ConfirmedOrder | null>(null);
-  readonly orderNumber = 'SN-03621362';
+  readonly checking = input(false);
+  readonly errorMessage = input('');
   readonly homeRequested = output<void>();
+  readonly retryRequested = output<void>();
+  readonly checkoutRequested = output<void>();
 }
