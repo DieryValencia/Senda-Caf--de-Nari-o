@@ -111,8 +111,8 @@
 
           <fieldset class="payment-section">
             <legend><span>02</span> Método de pago</legend>
-            <p class="payment-note">Selecciona un medio para la simulación del pedido.</p>
-            <div class="payment-methods" role="group" aria-label="Método de pago simulado">
+            <p class="payment-note">Selecciona tu forma de pago.</p>
+            <div class="payment-methods" role="group" aria-label="Forma de pago">
               @for (method of paymentMethods; track method.id) {
                 <button
                   type="button"
@@ -125,19 +125,16 @@
                 </button>
               }
             </div>
-            <p class="payment-note">
-              Usa solo datos ficticios para la demostración. No ingreses información real: no hay cobros
-              ni se envían o almacenan estos datos.
-            </p>
             @switch (selectedPaymentMethod()) {
               @case ('pse') {
                 <div class="payment-fields">
                   <label class="field">
-                    <span>Banco de prueba</span>
+                    <span>Banco</span>
                     <select name="bank" [(ngModel)]="paymentDetails.bank">
                       <option value="">Selecciona un banco</option>
-                      <option value="banco-demo">Banco de demostración</option>
-                      <option value="cooperativa-demo">Cooperativa de demostración</option>
+                      <option value="bancolombia">Bancolombia</option>
+                      <option value="banco-bogota">Banco de Bogotá</option>
+                      <option value="davivienda">Davivienda</option>
                     </select>
                     @if (paymentFieldError('bank'); as error) {
                       <small class="field-error">{{ error }}</small>
@@ -156,14 +153,14 @@
                     }
                   </label>
                   <label class="field">
-                    <span>Número de documento ficticio</span>
+                    <span>Número de documento</span>
                     <input
                       type="text"
                       name="documentNumber"
                       [(ngModel)]="paymentDetails.documentNumber"
                       autocomplete="off"
                       maxlength="20"
-                      placeholder="Ej. 123456"
+                      placeholder="Número de documento"
                     />
                     @if (paymentFieldError('documentNumber'); as error) {
                       <small class="field-error">{{ error }}</small>
@@ -174,21 +171,21 @@
               @case ('card') {
                 <div class="payment-fields">
                   <label class="field field-full">
-                    <span>Nombre de prueba en la tarjeta</span>
+                    <span>Nombre del titular</span>
                     <input
                       type="text"
                       name="cardholder"
                       [(ngModel)]="paymentDetails.cardholder"
                       autocomplete="off"
                       maxlength="100"
-                      placeholder="Ej. Usuario de prueba"
+                      placeholder="Nombre como aparece en la tarjeta"
                     />
                     @if (paymentFieldError('cardholder'); as error) {
                       <small class="field-error">{{ error }}</small>
                     }
                   </label>
                   <label class="field field-full">
-                    <span>Número de tarjeta ficticio</span>
+                    <span>Número de tarjeta</span>
                     <input
                       type="text"
                       name="cardNumber"
@@ -196,14 +193,14 @@
                       inputmode="numeric"
                       autocomplete="off"
                       maxlength="19"
-                      placeholder="Usa cualquier valor de prueba"
+                      placeholder="Número de tarjeta"
                     />
                     @if (paymentFieldError('cardNumber'); as error) {
                       <small class="field-error">{{ error }}</small>
                     }
                   </label>
                   <label class="field">
-                    <span>Vencimiento de prueba</span>
+                    <span>Fecha de vencimiento</span>
                     <input
                       type="text"
                       name="cardExpiry"
@@ -217,7 +214,7 @@
                     }
                   </label>
                   <label class="field">
-                    <span>Código ficticio</span>
+                    <span>Código de seguridad</span>
                     <input
                       type="text"
                       name="cardCode"
@@ -225,7 +222,7 @@
                       inputmode="numeric"
                       autocomplete="off"
                       maxlength="4"
-                      placeholder="123"
+                      placeholder="CVV"
                     />
                     @if (paymentFieldError('cardCode'); as error) {
                       <small class="field-error">{{ error }}</small>
@@ -236,14 +233,14 @@
               @case ('nequi') {
                 <div class="payment-fields">
                   <label class="field">
-                    <span>Celular de prueba de Nequi</span>
+                    <span>Número de celular asociado a Nequi</span>
                     <input
                       type="tel"
                       name="nequiPhone"
                       [(ngModel)]="paymentDetails.nequiPhone"
                       autocomplete="off"
                       maxlength="30"
-                      placeholder="Ej. 3001234567"
+                      placeholder="Número de celular"
                     />
                     @if (paymentFieldError('nequiPhone'); as error) {
                       <small class="field-error">{{ error }}</small>
@@ -287,12 +284,11 @@
           class="pay-button"
           type="submit"
           form="checkout-form"
-          [disabled]="cart.itemCount() === 0 || submitting()"
+          [disabled]="cart.itemCount() === 0"
         >
-          {{ submitting() ? 'Procesando pedido…' : 'Pagar (simulación)' }}
+          Confirmar pedido
           <span aria-hidden="true">→</span>
         </button>
-        <p class="secure-note">Este flujo es una simulación; no se procesará un pago real.</p>
       </aside>
     </div>
   }

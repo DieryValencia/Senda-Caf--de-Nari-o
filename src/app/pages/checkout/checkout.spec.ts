@@ -45,7 +45,7 @@ describe('Checkout', () => {
     expect(completed).toBe(false);
   });
 
-  it('simulates checkout with the selected method and no external payment service', () => {
+  it('requires selected payment details and emits only the payment method', () => {
     cart.add(COFFEES[0]);
     Object.assign(component.shippingForm, {
       name: 'Oskar Valencia',
@@ -58,8 +58,8 @@ describe('Checkout', () => {
     component.selectedPaymentMethod.set('nequi');
     component.startPayment();
 
-    expect(component.paymentFieldError('nequiPhone')).toBe('Este dato de demostración es obligatorio.');
-    expect(component.errorMessage()).toContain('datos de demostración');
+    expect(component.paymentFieldError('nequiPhone')).toBe('Este campo es obligatorio.');
+    expect(component.errorMessage()).toContain('datos del método de pago');
 
     component.paymentDetails.nequiPhone = '3001234567';
     let emittedValue: unknown;
@@ -85,14 +85,14 @@ describe('Checkout', () => {
     });
     component.startPayment();
 
-    expect(component.paymentFieldError('bank')).toBe('Este dato de demostración es obligatorio.');
+    expect(component.paymentFieldError('bank')).toBe('Este campo es obligatorio.');
     expect(component.paymentFieldError('documentNumber')).toBe(
-      'Este dato de demostración es obligatorio.',
+      'Este campo es obligatorio.',
     );
-    expect(component.errorMessage()).toContain('datos de demostración');
+    expect(component.errorMessage()).toContain('datos del método de pago');
   });
 
-  it('requires card demonstration fields but does not validate real card formats', () => {
+  it('requires card details without validating card formats', () => {
     cart.add(COFFEES[0]);
     Object.assign(component.shippingForm, {
       name: 'Oskar Valencia',
@@ -105,7 +105,7 @@ describe('Checkout', () => {
     component.selectedPaymentMethod.set('card');
     component.startPayment();
 
-    expect(component.paymentFieldError('cardNumber')).toBe('Este dato de demostración es obligatorio.');
+    expect(component.paymentFieldError('cardNumber')).toBe('Este campo es obligatorio.');
     Object.assign(component.paymentDetails, {
       cardholder: 'Prueba',
       cardNumber: 'demo',
@@ -121,17 +121,19 @@ describe('Checkout', () => {
     expect(selectedMethod).toBe('card');
   });
 
-  it('renders selectable payment method buttons and clearly labels the simulation', () => {
+  it('renders selectable payment methods with clean purchase copy', () => {
     const buttons = fixture.nativeElement.querySelectorAll('.payment-method') as NodeListOf<HTMLButtonElement>;
     const content = fixture.nativeElement.textContent as string;
 
     expect(buttons.length).toBe(3);
-    expect(content).toContain('Pagar (simulación)');
-    expect(content).toContain('no hay cobros');
+    expect(content).toContain('Confirmar pedido');
+    expect(content).not.toContain('demostración');
+    expect(content).not.toContain('simulación');
+    expect(content).not.toContain('prueba');
 
     buttons[2].click();
     fixture.detectChanges();
     expect(buttons[2].getAttribute('aria-pressed')).toBe('true');
-    expect(fixture.nativeElement.textContent).toContain('Celular de prueba de Nequi');
+    expect(fixture.nativeElement.textContent).toContain('Número de celular asociado a Nequi');
   });
 });

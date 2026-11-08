@@ -136,6 +136,11 @@
     font-size: 11px;
     font-weight: 600;
     cursor: pointer;
+    transition:
+      border-color 160ms ease,
+      background-color 160ms ease,
+      color 160ms ease,
+      transform 100ms ease-out;
 
     &.selected {
       border-color: $green;
@@ -143,17 +148,34 @@
       color: $green;
     }
 
-    .payment-fields {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      margin-top: 20px;
+    &:active {
+      transform: scale(0.98);
     }
 
     &:focus-visible {
       outline: 2px solid $green;
       outline-offset: 2px;
     }
+  }
+}
+
+.payment-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 20px;
+  animation: payment-fields-enter 180ms ease-out both;
+}
+
+@keyframes payment-fields-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -283,13 +305,6 @@
   }
 }
 
-.secure-note {
-  margin: 12px 0 0;
-  color: $muted;
-  font-size: 9px;
-  text-align: center;
-}
-
 @include mobile {
   .checkout-shell {
     min-height: calc(100vh - 89px);
@@ -301,6 +316,20 @@
 
     h1 {
       font-size: 48px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .payment-method {
+      transition: none;
+
+      &:active {
+        transform: none;
+      }
+    }
+
+    .payment-fields {
+      animation: none;
     }
   }
 
