@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import type { CartLine } from '../../cart/cart.store';
 import type { PaymentMethod } from '../../cart/purchase.models';
 import { CoffeePricePipe } from '../../coffee-price.pipe';
@@ -21,6 +21,7 @@ export interface ConfirmedOrder {
 })
 export class Confirmation {
   readonly order = input<ConfirmedOrder | null>(null);
+  readonly trackingExpanded = signal(false);
   readonly homeRequested = output<void>();
 
   paymentMethodLabel(method: PaymentMethod): string {

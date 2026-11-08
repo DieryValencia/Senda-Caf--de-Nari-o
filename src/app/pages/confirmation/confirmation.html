@@ -10,7 +10,7 @@
       <p class="eyebrow">Senda Café de Nariño</p>
       <h1 id="confirmation-title">Pedido<br />confirmado.</h1>
       <p class="confirmation-copy">
-        Gracias por elegir café de Nariño. Este pedido se generó como simulación; no se realizó ningún cobro.
+        Tu compra quedó registrada. Gracias por elegir café de Nariño.
       </p>
 
       <div class="order-number">
@@ -48,21 +48,71 @@
             <dd>{{ confirmedOrder.shipping === 0 ? 'Gratis' : (confirmedOrder.shipping | coffeePrice) }}</dd>
           </div>
           <div class="summary-total">
-            <dt>Total simulado</dt>
+            <dt>Total</dt>
             <dd>{{ confirmedOrder.total | coffeePrice }}</dd>
           </div>
           <div>
-            <dt>Método seleccionado</dt>
+            <dt>Método de pago</dt>
             <dd>{{ paymentMethodLabel(confirmedOrder.paymentMethod) }}</dd>
           </div>
         </dl>
       </section>
 
-      <p class="demo-note">Simulación visual · No se enviaron datos de pago.</p>
+      <button
+        class="tracking-toggle"
+        type="button"
+        [attr.aria-expanded]="trackingExpanded()"
+        aria-controls="order-tracking"
+        (click)="trackingExpanded.update((expanded) => !expanded)"
+      >
+        <span>{{ trackingExpanded() ? 'Ocultar seguimiento' : 'Seguir pedido' }}</span>
+        <span class="tracking-chevron" [class.is-expanded]="trackingExpanded()" aria-hidden="true">⌄</span>
+      </button>
+      @if (trackingExpanded()) {
+        <section id="order-tracking" class="tracking-panel" aria-labelledby="tracking-title">
+          <div class="tracking-heading">
+            <div>
+              <p class="tracking-eyebrow">PEDIDO {{ confirmedOrder.reference }}</p>
+              <h2 id="tracking-title">Seguimiento</h2>
+            </div>
+            <span class="tracking-status"><span aria-hidden="true"></span>En preparación</span>
+          </div>
+          <ol class="tracking-timeline">
+            <li class="is-complete">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>Pedido confirmado</h3>
+                <p>Recibimos tu pedido correctamente.</p>
+              </div>
+            </li>
+            <li class="is-current" aria-current="step">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>Preparando tu café</h3>
+                <p>Estamos organizando tu pedido con cuidado.</p>
+              </div>
+            </li>
+            <li class="is-upcoming">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>En camino</h3>
+                <p>Te avisaremos cuando salga hacia tu dirección.</p>
+              </div>
+            </li>
+            <li class="is-upcoming">
+              <span class="tracking-marker" aria-hidden="true"></span>
+              <div>
+                <h3>Entregado</h3>
+                <p>Disfruta tu café de Nariño.</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+      }
     } @else {
       <p class="eyebrow">Senda Café de Nariño</p>
       <h1 id="confirmation-title">Aún no hay<br />un pedido.</h1>
-      <p class="confirmation-copy">Completa el checkout para ver el resumen de la simulación.</p>
+      <p class="confirmation-copy">Completa el checkout para ver el resumen de tu pedido.</p>
     }
 
     <button class="home-button" type="button" (click)="homeRequested.emit()">
