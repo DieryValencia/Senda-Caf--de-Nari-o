@@ -3,6 +3,8 @@ import { afterEach, vi } from 'vitest';
 import { App } from './app';
 import { AuthApi } from './auth/auth-api';
 import { MockAuthApi } from './auth/mock-auth-api';
+import { CartStore } from './cart/cart.store';
+import { COFFEES } from './coffee.data';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -44,5 +46,22 @@ describe('App', () => {
       'Producción de café',
     );
     expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+  });
+
+  it('completes a simulated order locally and clears the bag', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    const cart = TestBed.inject(CartStore);
+    const scrollTo = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
+    cart.add(COFFEES[0]);
+
+    app.confirmOrder('nequi');
+
+    expect(app.view()).toBe('confirmation');
+    expect(app.confirmedOrder()?.paymentMethod).toBe('nequi');
+    expect(app.confirmedOrder()?.reference).toMatch(/^SN-\d{8}$/);
+    expect(app.confirmedOrder()?.items).toEqual([{ coffee: COFFEES[0], quantity: 1 }]);
+    expect(cart.items()).toEqual([]);
+    expect(scrollTo).toHaveBeenCalled();
   });
 });
