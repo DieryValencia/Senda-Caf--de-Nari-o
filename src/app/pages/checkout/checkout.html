@@ -125,7 +125,133 @@
                 </button>
               }
             </div>
-            <p class="payment-note">Demostración visual: no se realiza ningún cobro ni se envían datos.</p>
+            <p class="payment-note">
+              Usa solo datos ficticios para la demostración. No ingreses información real: no hay cobros
+              ni se envían o almacenan estos datos.
+            </p>
+            @switch (selectedPaymentMethod()) {
+              @case ('pse') {
+                <div class="payment-fields">
+                  <label class="field">
+                    <span>Banco de prueba</span>
+                    <select name="bank" [(ngModel)]="paymentDetails.bank">
+                      <option value="">Selecciona un banco</option>
+                      <option value="banco-demo">Banco de demostración</option>
+                      <option value="cooperativa-demo">Cooperativa de demostración</option>
+                    </select>
+                    @if (paymentFieldError('bank'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Tipo de documento</span>
+                    <select name="documentType" [(ngModel)]="paymentDetails.documentType">
+                      <option value="">Selecciona un tipo</option>
+                      <option value="cc">Cédula de ciudadanía</option>
+                      <option value="ce">Cédula de extranjería</option>
+                      <option value="nit">NIT</option>
+                    </select>
+                    @if (paymentFieldError('documentType'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Número de documento ficticio</span>
+                    <input
+                      type="text"
+                      name="documentNumber"
+                      [(ngModel)]="paymentDetails.documentNumber"
+                      autocomplete="off"
+                      maxlength="20"
+                      placeholder="Ej. 123456"
+                    />
+                    @if (paymentFieldError('documentNumber'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                </div>
+              }
+              @case ('card') {
+                <div class="payment-fields">
+                  <label class="field field-full">
+                    <span>Nombre de prueba en la tarjeta</span>
+                    <input
+                      type="text"
+                      name="cardholder"
+                      [(ngModel)]="paymentDetails.cardholder"
+                      autocomplete="off"
+                      maxlength="100"
+                      placeholder="Ej. Usuario de prueba"
+                    />
+                    @if (paymentFieldError('cardholder'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field field-full">
+                    <span>Número de tarjeta ficticio</span>
+                    <input
+                      type="text"
+                      name="cardNumber"
+                      [(ngModel)]="paymentDetails.cardNumber"
+                      inputmode="numeric"
+                      autocomplete="off"
+                      maxlength="19"
+                      placeholder="Usa cualquier valor de prueba"
+                    />
+                    @if (paymentFieldError('cardNumber'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Vencimiento de prueba</span>
+                    <input
+                      type="text"
+                      name="cardExpiry"
+                      [(ngModel)]="paymentDetails.cardExpiry"
+                      autocomplete="off"
+                      maxlength="7"
+                      placeholder="MM/AA"
+                    />
+                    @if (paymentFieldError('cardExpiry'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                  <label class="field">
+                    <span>Código ficticio</span>
+                    <input
+                      type="text"
+                      name="cardCode"
+                      [(ngModel)]="paymentDetails.cardCode"
+                      inputmode="numeric"
+                      autocomplete="off"
+                      maxlength="4"
+                      placeholder="123"
+                    />
+                    @if (paymentFieldError('cardCode'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                </div>
+              }
+              @case ('nequi') {
+                <div class="payment-fields">
+                  <label class="field">
+                    <span>Celular de prueba de Nequi</span>
+                    <input
+                      type="tel"
+                      name="nequiPhone"
+                      [(ngModel)]="paymentDetails.nequiPhone"
+                      autocomplete="off"
+                      maxlength="30"
+                      placeholder="Ej. 3001234567"
+                    />
+                    @if (paymentFieldError('nequiPhone'); as error) {
+                      <small class="field-error">{{ error }}</small>
+                    }
+                  </label>
+                </div>
+              }
+            }
           </fieldset>
         </form>
 

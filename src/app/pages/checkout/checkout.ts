@@ -5,6 +5,17 @@ import { AuthService } from '../../auth/auth.service';
 import { CoffeePricePipe } from '../../coffee-price.pipe';
 import type { PaymentMethod, ShippingDetails } from '../../cart/purchase.models';
 
+type SimulatedPaymentDetails = {
+  bank: string;
+  documentType: string;
+  documentNumber: string;
+  nequiPhone: string;
+  cardholder: string;
+  cardNumber: string;
+  cardExpiry: string;
+  cardCode: string;
+};
+
 @Component({
   selector: 'app-checkout',
   standalone: true,
@@ -36,6 +47,16 @@ export class Checkout {
     city: '',
     department: '',
   };
+  readonly paymentDetails: SimulatedPaymentDetails = {
+    bank: '',
+    documentType: '',
+    documentNumber: '',
+    nequiPhone: '',
+    cardholder: '',
+    cardNumber: '',
+    cardExpiry: '',
+    cardCode: '',
+  };
 
   get isLoggedIn(): boolean {
     return this.auth.isLoggedIn();
@@ -65,6 +86,34 @@ export class Checkout {
     return '';
   }
 
+  paymentFieldError(field: keyof SimulatedPaymentDetails): string {
+    if (
+      !this.submitted() ||
+      !this.requiredPaymentFields().includes(field) ||
+      this.paymentDetails[field].trim()
+    ) {
+      return '';
+    }
+
+    return 'Este dato de demostración es obligatorio.';
+  }
+
+  private requiredPaymentFields(): (keyof SimulatedPaymentDetails)[] {
+    const fields: Record<PaymentMethod, (keyof SimulatedPaymentDetails)[]> = {
+      pse: ['bank', 'documentType', 'documentNumber'],
+      card: ['cardholder', 'cardNumber', 'cardExpiry', 'cardCode'],
+      nequi: ['nequiPhone'],
+    };
+
+    return fields[this.selectedPaymentMethod()];
+  }
+
+  private isPaymentDetailsValid(): boolean {
+    return this.requiredPaymentFields().every((field) =>
+      this.paymentDetails[field].trim(),
+    );
+  }
+
   private isShippingValid(): boolean {
     return (
       this.fieldError('name') === '' &&
@@ -87,10 +136,26 @@ export class Checkout {
       return;
     }
     this.submitted.set(true);
-    if (!this.isShippingValid()) {
+    if (!this.isShippingValid() || !this.isPaymentDetailsValid()) {
+      if (this.isShippingValid()) {
+        this.errorMessage.set(
+          'Completa los datos de demostración del método de pago seleccionado.',
+        );
+      }
       return;
     }
 
-    this.checkoutRequested.emit(this.selectedPaymentMethod());
+    const method = this.selectedPaymentMethod();
+    Object.assign(this.paymentDetails, {
+      bank: '',
+      documentType: '',
+      documentNumber: '',
+      nequiPhone: '',
+      cardholder: '',
+      cardNumber: '',
+      cardExpiry: '',
+      cardCode: '',
+    });
+    this.checkoutRequested.emit(method);
   }
 }
