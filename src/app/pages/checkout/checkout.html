@@ -13,7 +13,12 @@
 
     <div class="checkout-layout">
       <div class="checkout-form-column">
-        <form class="checkout-form" novalidate>
+        <form
+          id="checkout-form"
+          class="checkout-form"
+          novalidate
+          (ngSubmit)="startPayment()"
+        >
           <fieldset>
             <legend><span>01</span> Datos de envío</legend>
             <div class="field-grid">
@@ -22,74 +27,105 @@
                 <input
                   type="text"
                   name="name"
+                  [(ngModel)]="shippingForm.name"
                   autocomplete="name"
-                  [(ngModel)]="userName"
+                  maxlength="120"
                   placeholder="Tu nombre"
                 />
+                @if (fieldError('name'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Correo electrónico</span>
                 <input
                   type="email"
                   name="email"
+                  [(ngModel)]="shippingForm.email"
                   autocomplete="email"
-                  [(ngModel)]="userEmail"
+                  maxlength="254"
                   placeholder="nombre@correo.com"
                 />
+                @if (fieldError('email'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Teléfono</span>
-                <input type="tel" name="phone" autocomplete="tel" placeholder="+57 300 000 0000" />
+                <input
+                  type="tel"
+                  name="phone"
+                  [(ngModel)]="shippingForm.phone"
+                  autocomplete="tel"
+                  maxlength="30"
+                  placeholder="+57 300 000 0000"
+                />
+                @if (fieldError('phone'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field field-full">
                 <span>Dirección</span>
                 <input
                   type="text"
                   name="address"
+                  [(ngModel)]="shippingForm.address"
                   autocomplete="street-address"
+                  maxlength="180"
                   placeholder="Calle, carrera, número"
                 />
+                @if (fieldError('address'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Ciudad</span>
                 <input
                   type="text"
                   name="city"
+                  [(ngModel)]="shippingForm.city"
                   autocomplete="address-level2"
+                  maxlength="100"
                   placeholder="Ciudad"
                 />
+                @if (fieldError('city'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
               <label class="field">
                 <span>Departamento</span>
                 <input
                   type="text"
                   name="department"
+                  [(ngModel)]="shippingForm.department"
                   autocomplete="address-level1"
+                  maxlength="100"
                   placeholder="Departamento"
                 />
+                @if (fieldError('department'); as error) {
+                  <small class="field-error">{{ error }}</small>
+                }
               </label>
             </div>
           </fieldset>
 
           <fieldset class="payment-section">
             <legend><span>02</span> Método de pago</legend>
-            <div class="payment-options" role="group" aria-label="Selecciona un método de pago">
-              @for (method of paymentMethods; track method) {
-                <button
-                  class="payment-option"
-                  type="button"
-                  [class.selected]="selectedPayment() === method"
-                  [attr.aria-pressed]="selectedPayment() === method"
-                  (click)="selectedPayment.set(method)"
-                >
-                  <span class="radio-mark" aria-hidden="true"></span>
-                  <span>{{ method }}</span>
-                </button>
-              }
-            </div>
-            <p class="payment-note">Maqueta visual. No se procesará ningún pago.</p>
+            <p class="payment-note">
+              Elige de forma segura tu medio de pago en Wompi. Allí podrás pagar con:
+            </p>
+            <ul class="payment-methods" aria-label="Medios de pago disponibles en Wompi">
+              <li>PSE</li>
+              <li>Tarjeta</li>
+              <li>Nequi</li>
+            </ul>
+            <p class="payment-note">Senda no recibe ni almacena datos de tarjeta.</p>
           </fieldset>
         </form>
+
+        @if (errorMessage()) {
+          <p class="checkout-error" role="alert">{{ errorMessage() }}</p>
+        }
       </div>
 
       <aside class="order-summary" aria-labelledby="summary-title">
@@ -117,11 +153,14 @@
         }
         <button
           class="pay-button"
-          type="button"
-          [disabled]="cart.itemCount() === 0"
-          (click)="payRequested.emit()"
-        >Pagar <span aria-hidden="true">→</span></button>
-        <p class="secure-note">Compra de demostración · Sin transacción real</p>
+          type="submit"
+          form="checkout-form"
+          [disabled]="cart.itemCount() === 0 || submitting()"
+        >
+          {{ submitting() ? 'Conectando con Wompi…' : 'Continuar a Wompi' }}
+          <span aria-hidden="true">→</span>
+        </button>
+        <p class="secure-note">Pago procesado de forma segura por Wompi en modo sandbox.</p>
       </aside>
     </div>
   }
