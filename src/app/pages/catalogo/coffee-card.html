@@ -1,0 +1,42 @@
+<article class="product-card">
+  <div class="product-image">
+    <img
+      [src]="coffee().cardImage"
+      [alt]="'Fotografía de café representativa de ' + coffee().name"
+      loading="eager"
+      decoding="async"
+      width="480"
+      height="600"
+    />
+    <button
+      class="image-open"
+      type="button"
+      [attr.aria-label]="'Ver ficha de ' + coffee().name"
+      (click)="viewRequested.emit(coffee())"
+    ></button>
+    <span>{{ coffee().group }}</span>
+    <button
+      class="quick-add"
+      type="button"
+      [attr.aria-label]="'Agregar ' + coffee().name + ' a la bolsa'"
+      (click)="addRequested.emit(coffee())"
+    >
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" />
+      </svg>
+    </button>
+  </div>
+  <div class="product-meta">
+    <small>{{ coffee().municipality }} · {{ coffee().variety }}</small>
+    <h3>{{ coffee().name }}</h3>
+    <p>{{ coffee().notes.join(' · ') }}</p>
+    <div class="card-facts">
+      <span>{{ coffee().plantType }}</span>
+      <span>{{ coffee().rustResistance }}</span>
+    </div>
+    <strong>{{ coffee().price | coffeePrice }}</strong>
+    <button class="card-link" type="button" (click)="viewRequested.emit(coffee())">
+      Ver ficha <span aria-hidden="true">→</span>
+    </button>
+  </div>
+</article>

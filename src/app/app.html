@@ -1,0 +1,61 @@
+<app-header
+  [itemCount]="cart.itemCount()"
+  (navigate)="navigate($event)"
+  (bagRequested)="openBag()"
+/>
+
+<main>
+  @if (view() === 'inicio') {
+    <app-inicio (navigate)="navigate($event)" />
+  } @else if (view() === 'catalogo') {
+    @defer (when view() === 'catalogo') {
+      <app-catalogo
+        [coffees]="filteredCoffees()"
+        [totalCount]="coffees.length"
+        [selectedGroup]="selectedGroup()"
+        (groupSelected)="selectedGroup.set($event)"
+        (coffeeSelected)="openCoffee($event)"
+        (addRequested)="addToBag($event)"
+      />
+    }
+  } @else if (view() === 'detalle') {
+    @defer (when view() === 'detalle') {
+      <app-detalle
+        [coffee]="selectedCoffee()"
+        (backRequested)="navigate('catalogo')"
+        (addRequested)="addToBag($event)"
+      />
+    }
+  } @else if (view() === 'checkout') {
+    @defer (when view() === 'checkout') {
+      <app-checkout
+        (backRequested)="backToBag()"
+        (checkoutRequested)="confirmOrder($event)"
+        (loginRequested)="navigate('login')"
+      />
+    }
+  } @else if (view() === 'confirmation') {
+    @defer (when view() === 'confirmation') {
+      <app-confirmation [order]="confirmedOrder()" (homeRequested)="navigate('inicio')" />
+    }
+  } @else if (view() === 'login') {
+    <app-login (authenticated)="navigate('catalogo')" (goToRegister)="navigate('register')" />
+  } @else if (view() === 'register') {
+    <app-register (authenticated)="navigate('catalogo')" (goToLogin)="navigate('login')" />
+  } @else {
+    <app-origen />
+  }
+</main>
+
+<app-footer (navigate)="navigate($event)" />
+<app-bottom-nav (navigate)="navigate($event)" />
+
+@if (bagOpen()) {
+  @defer (when bagOpen()) {
+    <app-bag
+      (closeRequested)="bagOpen.set(false)"
+      (checkoutRequested)="continueToCheckout()"
+      (catalogRequested)="navigate('catalogo')"
+    />
+  }
+}

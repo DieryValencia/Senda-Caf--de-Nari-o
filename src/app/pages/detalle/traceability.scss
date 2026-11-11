@@ -1,0 +1,107 @@
+@use '../../../styles/tokens' as *;
+
+:host {
+  display: block;
+}
+
+.detail-origin {
+  display: grid;
+  grid-template-columns: 36% 64%;
+  gap: 70px;
+  padding: 110px 0 0;
+}
+
+.trace-heading {
+  small {
+    @include eyebrow;
+    display: block;
+    margin-bottom: 28px;
+    color: $muted;
+  }
+
+  h2 {
+    @include heading;
+    line-height: 0.98;
+    margin: 0;
+  }
+}
+
+.template-note {
+  max-width: 340px;
+  margin: 24px 0 0;
+  color: #69736b;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+dl {
+  margin: 0;
+
+  > div {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: start;
+    padding: 22px 0;
+    border-top: 1px solid #c7c1b5;
+
+    &:last-child {
+      border-bottom: 1px solid #c7c1b5;
+    }
+  }
+
+  dt {
+    color: #6e7770;
+    font-size: 9px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.45;
+
+    small {
+      display: block;
+      margin-top: 8px;
+      color: #6e7770;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}
+
+@include mobile {
+  .detail-origin {
+    display: block;
+    padding: 70px 20px 0;
+  }
+
+  .trace-heading {
+    margin-bottom: 36px;
+
+    h2 {
+      font-size: 44px;
+    }
+  }
+
+  .template-note {
+    max-width: none;
+  }
+
+  dl > div {
+    grid-template-columns: 105px 1fr;
+  }
+
+  dl dd {
+    font-size: 14px;
+  }
+}

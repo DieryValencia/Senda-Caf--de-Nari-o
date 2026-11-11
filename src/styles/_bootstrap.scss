@@ -1,0 +1,25 @@
+@use 'tokens' as *;
+
+$primary: $green;
+$body-bg: $cream;
+$body-color: $ink;
+$font-family-base: $font-sans;
+$font-size-base: 0.875rem;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+$border-radius-pill: 100px;
+$btn-border-radius: 0;
+$btn-border-radius-sm: 0;
+$btn-border-radius-lg: 0;
+$btn-font-weight: 700;
+$input-border-radius: 0;
+$link-color: $ink;
+$link-decoration: none;
+$link-hover-color: $green;
+$headings-font-weight: 650;
+$headings-color: $ink;
+$enable-shadows: false;
+$enable-gradients: false;
+
+@import 'bootstrap/scss/bootstrap';

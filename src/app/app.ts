@@ -1,0 +1,91 @@
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { COFFEES, Coffee, VarietyGroup } from './coffee.data';
+import { CartStore } from './cart/cart.store';
+import type { PaymentMethod } from './cart/purchase.models';
+import { Bag } from './pages/bag/bag';
+import { Checkout } from './pages/checkout/checkout';
+import { Confirmation } from './pages/confirmation/confirmation';
+import type { ConfirmedOrder } from './pages/confirmation/confirmation';
+import { BottomNav } from './layout/bottom-nav/bottom-nav';
+import { Footer } from './layout/footer/footer';
+import { Header } from './layout/header/header';
+import { Catalogo } from './pages/catalogo/catalogo';
+import { Detalle } from './pages/detalle/detalle';
+import { Inicio } from './pages/inicio/inicio';
+import { LoginComponent } from './auth/login.component';
+import { Origen } from './pages/origen/origen';
+import { RegisterComponent } from './auth/register.component';
+
+type View = 'inicio' | 'catalogo' | 'detalle' | 'origen' | 'checkout' | 'confirmation' | 'login' | 'register';
+
+@Component({
+  selector: 'app-root',
+  imports: [Header, Footer, BottomNav, Inicio, Catalogo, Detalle, LoginComponent, Origen, RegisterComponent, Bag, Checkout, Confirmation],
+  templateUrl: './app.html',
+  styleUrl: './app.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class App {
+  readonly cart = inject(CartStore);
+  readonly view = signal<View>('inicio');
+  readonly bagOpen = signal(false);
+  readonly confirmedOrder = signal<ConfirmedOrder | null>(null);
+  readonly coffees = COFFEES;
+  readonly selectedGroup = signal<VarietyGroup>('Todas');
+  readonly selectedCoffee = signal<Coffee>(COFFEES[0]);
+  readonly filteredCoffees = computed(() =>
+    this.selectedGroup() === 'Todas'
+      ? this.coffees
+      : this.coffees.filter((coffee) => coffee.group === this.selectedGroup()),
+  );
+
+  navigate(view: View): void {
+    this.view.set(view);
+    this.bagOpen.set(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  openBag(): void {
+    this.bagOpen.set(true);
+  }
+
+  addToBag(coffee: Coffee): void {
+    this.cart.add(coffee);
+    this.openBag();
+  }
+
+  continueToCheckout(): void {
+    if (this.cart.itemCount() === 0) {
+      return;
+    }
+
+    this.navigate('checkout');
+  }
+
+  backToBag(): void {
+    this.bagOpen.set(true);
+  }
+
+  confirmOrder(paymentMethod: PaymentMethod): void {
+    const items = this.cart.items();
+    if (items.length === 0) {
+      return;
+    }
+
+    this.confirmedOrder.set({
+      reference: `SN-${Math.floor(10_000_000 + Math.random() * 90_000_000)}`,
+      items: items.map((line) => ({ ...line })),
+      subtotal: this.cart.subtotal(),
+      shipping: this.cart.shipping(),
+      total: this.cart.total(),
+      paymentMethod,
+    });
+    this.cart.clear();
+    this.navigate('confirmation');
+  }
+
+  openCoffee(coffee: Coffee): void {
+    this.selectedCoffee.set(coffee);
+    this.navigate('detalle');
+  }
+}

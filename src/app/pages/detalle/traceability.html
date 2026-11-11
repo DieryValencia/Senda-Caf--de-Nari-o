@@ -1,0 +1,22 @@
+<div class="detail-origin">
+  <div class="trace-heading">
+    <small>FICHA DE TRAZABILIDAD</small>
+    <h2>Información<br />del producto.</h2>
+    <p class="template-note">
+      Los campos marcados como “propuesta de lote” son demostrativos. La información botánica y
+      regional se basa en la fuente indicada.
+    </p>
+  </div>
+
+  <dl>
+    <div><dt>Nombre varietal</dt><dd>{{ coffee().variety }}<small>{{ coffee().species }} · {{ coffee().group }}</small></dd></div>
+    <div><dt>Linaje / origen</dt><dd>{{ coffee().lineage }}<small>Información botánica o histórica disponible</small></dd></div>
+    <div><dt>Planta</dt><dd>{{ coffee().plantType }}<small>{{ coffee().rustResistance }}</small></dd></div>
+    <div><dt>Presencia en Nariño</dt><dd>{{ coffee().evidence }}<small>{{ coffee().municipality }} · {{ coffee().altitude }}</small></dd></div>
+    <div><dt>Lote / productor</dt><dd>{{ coffee().farm }}<small>{{ coffee().producer }}</small></dd></div>
+    <div><dt>Beneficio</dt><dd>{{ coffee().process }}<small>{{ coffee().harvest }} · {{ coffee().drying }}</small></dd></div>
+    <div><dt>Tueste sugerido</dt><dd>{{ coffee().roast }}<small>Perfil orientativo: {{ coffee().notes.join(' · ') }}</small></dd></div>
+    <div><dt>Precio verificado</dt><dd>{{ coffee().price | coffeePrice }}<small>{{ coffee().priceBasis }} <a [href]="coffee().priceSource" target="_blank" rel="noopener noreferrer">Fuente ↗</a> · consulta: {{ coffee().priceCheckedAt }}</small></dd></div>
+    <div><dt>Fotografía</dt><dd><a [href]="coffee().imageSource" target="_blank" rel="noopener noreferrer">{{ coffee().imageCredit }} ↗</a><small>Fotografía real de granos. Es representativa del producto y no identifica visualmente el cultivar.</small></dd></div>
+  </dl>
+</div>
